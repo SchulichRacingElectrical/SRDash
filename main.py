@@ -15,7 +15,7 @@
 # have received a copy of the GNU General Public License along with
 # this code. If not, see <http://www.gnu.org/licenses/>.
 
-import serial
+#import serial
 from serial import SerialException
 from serial.tools import list_ports
 
@@ -32,7 +32,6 @@ class SerialConnection():
         pass
 
     def get_available_devices(self):
-        #Logger.debug("SerialConnection: getting available devices")
         devices = [x[0] for x in list_ports.comports()]
         devices.sort()
         filtered_devices = filter(lambda device: not device.startswith('/dev/ttyUSB') 
@@ -55,7 +54,7 @@ class SerialConnection():
 
     def read(self, count):
         ser = self.ser
-        if ser == None: raise PortNotOpenException()
+        if ser == None: raise Exception()
         try:
             return ser.read(count)
         except SerialException as e:
@@ -82,7 +81,7 @@ class SerialConnection():
 
             return self.ser.write(data)
         except SerialException as e:
-            raise CommsErrorException(cause=e)
+            raise Exception(e)
 
     def flushInput(self):
         try:
@@ -90,7 +89,7 @@ class SerialConnection():
 
             self.ser.flushInput()
         except SerialException as e:
-            raise CommsErrorException(cause=e)
+            raise Exception(e)
 
     def flushOutput(self):
         try:
@@ -98,7 +97,9 @@ class SerialConnection():
 
             self.ser.flushOutput()
         except SerialException as e:
-            raise CommsErrorException(cause=e)
+            raise Exception(e)
+
+
 sc = SerialConnection()
 filtered_devices = sc.get_available_devices()
 print(filtered_devices)
