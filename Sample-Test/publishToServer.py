@@ -1,12 +1,8 @@
-import time
-import logging
-import operator
 import collections
-import os
+import logging
+import time
 
-import psutil
 import requests
-
 from Database import Database
 
 PUB_ENDPOINT = 'http://localhost:8081/pub'

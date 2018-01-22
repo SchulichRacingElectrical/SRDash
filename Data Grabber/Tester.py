@@ -1,5 +1,3 @@
-
-import datetime
 from Database import Database
 
 while True:

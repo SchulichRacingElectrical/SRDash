@@ -1,18 +1,14 @@
-import json
-import serial
-from serial.tools import list_ports
-import re
-import datetime
-from Database import Database
-import time
-import logging
-import operator
 import collections
-import os
+import datetime
+import json
+import logging
+import re
+import time
 
-import psutil
 import requests
-
+import serial
+from Database import Database
+from serial.tools import list_ports
 
 PUB_ENDPOINT = 'http://localhost:8081/pub'
 STATS_CHANNEL = 'system_stats'
