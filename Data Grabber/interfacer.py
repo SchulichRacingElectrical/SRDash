@@ -1,18 +1,14 @@
-import json
-import serial
-from serial.tools import list_ports
-import re
-import datetime
-from Database import Database
-import time
-import logging
-import operator
 import collections
-import os
+import datetime
+import json
+import logging
+import re
+import time
 
-import psutil
 import requests
-
+import serial
+from Database import Database
+from serial.tools import list_ports
 
 PUB_ENDPOINT = 'http://localhost:8081/pub'
 STATS_CHANNEL = 'system_stats'
@@ -70,7 +66,7 @@ def main():
 
     ser = serial.Serial(device, timeout=timeout, write_timeout=writeTimeout)
 
-    f = open("sample_units.json")
+    f = open("Data Grabber/sample_units.json")
     contents = f.read()
 
     j = json.loads(contents)
@@ -80,12 +76,13 @@ def main():
         columns.append(l['nm'])
 
     # '"{"setTelemetry":{"rate":1}}'
-    ser.write(b'{"setTelemetry":{"rate":50}}\r\n')
+    ser.write(b'{"setTelemetry":{"rate":10}}\r\n')
     #ser.write(b'{"setTelemetry":{"rc":1}}\r\n')
 
 
     while True:
-        db = Database()
+        # TODO: Add nchan to MySQL
+        #db = Database()
         # pub.register(Database)
 
         row = ser.readline()
@@ -98,7 +95,7 @@ def main():
             for item in raw_data:
                 row_list.append(item)
             # print(row_list)
-            db.update(row_list)
+            #db.update(row_list)
             stats = SystemInfo(measurement_date=row_list[0],
                         x=row_list[7],
                         y=row_list[3]
