@@ -1,0 +1,389 @@
+
+{
+	"meta": [
+      {
+			"nm": "Interval",
+			"ut": "ms",
+			"min": 0,
+			"max": 0,
+			"prec": 0,
+			"sr": 1
+		},
+		{
+			"nm": "Utc",
+			"ut": "ms",
+			"min": 0,
+			"max": 0,
+			"prec": 0,
+			"sr": 1
+		},
+		{
+			"nm": "FrontLeft",
+			"ut": "mm",
+			"min": 0,
+			"max": 100,
+			"prec": 2,
+			"sr": 50
+		},
+		{
+			"nm": "SteeringAng",
+			"ut": "%",
+			"min": -100,
+			"max": 100,
+			"prec": 2,
+			"sr": 50
+		},
+		{
+			"nm": "FrontRight",
+			"ut": "mm",
+			"min": 0,
+			"max": 100,
+			"prec": 2,
+			"sr": 50
+		},
+		{
+			"nm": "Battery",
+			"ut": "Volts",
+			"min": 0,
+			"max": 20,
+			"prec": 2,
+			"sr": 1
+		},
+		{
+			"nm": "AccelX",
+			"ut": "G",
+			"min": -3,
+			"max": 3,
+			"prec": 2,
+			"sr": 25
+		},
+		{
+			"nm": "AccelY",
+			"ut": "G",
+			"min": -3,
+			"max": 3,
+			"prec": 2,
+			"sr": 25
+		},
+		{
+			"nm": "AccelZ",
+			"ut": "G",
+			"min": -3,
+			"max": 3,
+			"prec": 2,
+			"sr": 25
+		},
+		{
+			"nm": "Yaw",
+			"ut": "Deg/Sec",
+			"min": -120,
+			"max": 120,
+			"prec": 0,
+			"sr": 25
+		},
+		{
+			"nm": "Pitch",
+			"ut": "Deg/Sec",
+			"min": -120,
+			"max": 120,
+			"prec": 0,
+			"sr": 25
+		},
+		{
+			"nm": "Roll",
+			"ut": "Deg/Sec",
+			"min": -120,
+			"max": 120,
+			"prec": 0,
+			"sr": 25
+		},
+		{
+			"nm": "RPM",
+			"ut": "RPM",
+			"min": 0,
+			"max": 12500,
+			"prec": 0,
+			"sr": 25
+		},
+		{
+			"nm": "MAP",
+			"ut": "kPa",
+			"min": 0,
+			"max": 100,
+			"prec": 1,
+			"sr": 10
+		},
+		{
+			"nm": "TPS",
+			"ut": "%",
+			"min": 0,
+			"max": 100,
+			"prec": 1,
+			"sr": 50
+		},
+		{
+			"nm": "IgnTiming",
+			"ut": "Deg",
+			"min": -100,
+			"max": 100,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "WheelSpeed",
+			"ut": "kph",
+			"min": 0,
+			"max": 300,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "OilPress",
+			"ut": "kPa",
+			"min": 0,
+			"max": 1000,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "FuelPress",
+			"ut": "kPa",
+			"min": 0,
+			"max": 1000,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "IDC",
+			"ut": "%",
+			"min": 0,
+			"max": 100,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "AFR",
+			"ut": "",
+			"min": 0,
+			"max": 20,
+			"prec": 1,
+			"sr": 10
+		},
+		{
+			"nm": "EngineTemp",
+			"ut": "C",
+			"min": -50,
+			"max": 205,
+			"prec": 0,
+			"sr": 1
+		},
+		{
+			"nm": "IAT",
+			"ut": "C",
+			"min": -20,
+			"max": 205,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "FTS",
+			"ut": "C",
+			"min": 0,
+			"max": 200,
+			"prec": 1,
+			"sr": 10
+		},
+		{
+			"nm": "OilTemp",
+			"ut": "F",
+			"min": -20,
+			"max": 205,
+			"prec": 0,
+			"sr": 1
+		},
+		{
+			"nm": "FLX",
+			"ut": "%",
+			"min": 0,
+			"max": 100,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "Baro",
+			"ut": "kPa",
+			"min": 0,
+			"max": 200,
+			"prec": 0,
+			"sr": 1
+		},
+		{
+			"nm": "Gear",
+			"ut": "",
+			"min": 0,
+			"max": 6,
+			"prec": 0,
+			"sr": 5
+		},
+		{
+			"nm": "Knock",
+			"ut": "",
+			"min": 0,
+			"max": 1000,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "MetricSpeed",
+			"ut": "kph",
+			"min": 0,
+			"max": 300,
+			"prec": 2,
+			"sr": 10
+		},
+		{
+			"nm": "MetricDist",
+			"ut": "km",
+			"min": 0,
+			"max": 1000,
+			"prec": 2,
+			"sr": 10
+		},
+		{
+			"nm": "Latitude",
+			"ut": "Degrees",
+			"min": -180,
+			"max": 180,
+			"prec": 6,
+			"sr": 10
+		},
+		{
+			"nm": "Longitude",
+			"ut": "Degrees",
+			"min": -180,
+			"max": 180,
+			"prec": 6,
+			"sr": 10
+		},
+		{
+			"nm": "Speed",
+			"ut": "mph",
+			"min": 0,
+			"max": 150,
+			"prec": 2,
+			"sr": 10
+		},
+		{
+			"nm": "Distance",
+			"ut": "mi",
+			"min": 0,
+			"max": 0,
+			"prec": 3,
+			"sr": 10
+		},
+		{
+			"nm": "Altitude",
+			"ut": "ft",
+			"min": 0,
+			"max": 4000,
+			"prec": 1,
+			"sr": 10
+		},
+		{
+			"nm": "GPSSats",
+			"ut": "",
+			"min": 0,
+			"max": 20,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "GPSQual",
+			"ut": "",
+			"min": 0,
+			"max": 5,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "GPSDOP",
+			"ut": "",
+			"min": 0,
+			"max": 20,
+			"prec": 1,
+			"sr": 10
+		},
+		{
+			"nm": "LapCount",
+			"ut": "",
+			"min": 0,
+			"max": 0,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "LapTime",
+			"ut": "Min",
+			"min": 0,
+			"max": 0,
+			"prec": 4,
+			"sr": 10
+		},
+		{
+			"nm": "Sector",
+			"ut": "",
+			"min": 0,
+			"max": 0,
+			"prec": 0,
+			"sr": 10
+		},
+		{
+			"nm": "SectorTime",
+			"ut": "Min",
+			"min": 0,
+			"max": 0,
+			"prec": 4,
+			"sr": 10
+		},
+		{
+			"nm": "PredTime",
+			"ut": "Min",
+			"min": 0,
+			"max": 0,
+			"prec": 4,
+			"sr": 10
+		},
+		{
+			"nm": "ElapsedTime",
+			"ut": "Min",
+			"min": 0,
+			"max": 0,
+			"prec": 4,
+			"sr": 10
+		},
+		{
+			"nm": "CurrentLap",
+			"ut": "",
+			"min": 0,
+			"max": 0,
+			"prec": 0,
+			"sr": 10
+		},
+				{
+			"nm": "Unknown_1",
+			"ut": "",
+			"min": 0,
+			"max": 0,
+			"prec": 0,
+			"sr": 10
+		},
+				{
+			"nm": "Unknown_2",
+			"ut": "",
+			"min": 0,
+			"max": 0,
+			"prec": 0,
+			"sr": 10
+		}
+	]
+}
