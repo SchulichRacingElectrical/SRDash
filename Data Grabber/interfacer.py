@@ -7,7 +7,7 @@ import time
 
 import requests
 import serial
-
+print(serial.__path__)
 from serial.tools import list_ports
 
 PUB_ENDPOINT = 'http://localhost:8081/pub'
@@ -52,7 +52,7 @@ def main():
 
     logger = logging.getLogger('PYTOP')
     filtered_devices = get_available_devices()
-    # print(filtered_devices)
+    print(filtered_devices)
     r = re.compile(".*usbmodem")
     filtered_devices = filter(r.match, filtered_devices)
 
