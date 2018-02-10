@@ -84,8 +84,11 @@ def main():
         # TODO: Add nchan to MySQL
         #db = Database()
         # pub.register(Database)
+        try:
+            row = ser.readline()
+        except serial.SerialException:
+            row = None
 
-        row = ser.readline()
         print(row)
         if row is not None and b"{\"s\":{" in row:
             row_json = json.loads(row.decode('utf-8'))
