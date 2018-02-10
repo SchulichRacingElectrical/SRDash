@@ -7,7 +7,7 @@ import time
 
 import requests
 import serial
-from Database import Database
+#from Database import Database
 from serial.tools import list_ports
 
 PUB_ENDPOINT = 'http://localhost:8081/pub'
@@ -36,7 +36,7 @@ def top(sort_by='cpu_percent', top_n_procs=15):
     :return:
     """
     logger = logging.getLogger('PYTOP')
-    db = Database()
+    #db = Database()
 
     return SystemInfo(
         measurement_date=db.get_top()[0][0],
