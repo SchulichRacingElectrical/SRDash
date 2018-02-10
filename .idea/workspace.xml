@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ecd5beea-7e30-429d-bb87-32c24544daf1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Data Grabber/interfacer.py" afterPath="$PROJECT_DIR$/Data Grabber/interfacer.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -35,8 +34,8 @@
       <file leaf-file-name="interfacer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Data Grabber/interfacer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="38" column="5" lean-forward="false" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
+            <state relative-caret-position="510">
+              <caret line="34" column="50" lean-forward="true" selection-start-line="34" selection-start-column="50" selection-end-line="34" selection-end-column="50" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -47,18 +46,8 @@
       <file leaf-file-name="app.jsx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/HTML/js/app.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1485">
+            <state relative-caret-position="402">
               <caret line="99" column="79" lean-forward="false" selection-start-line="99" selection-start-column="38" selection-end-line="99" selection-end-column="79" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Listener.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Data Grabber/Listener.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="8" lean-forward="false" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -68,7 +57,7 @@
         <entry file="file://$PROJECT_DIR$/HTML/js/listener-test.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -370,7 +359,14 @@
       <option name="project" value="LOCAL" />
       <updated>1518294035150</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixed  configuration for pi and made changes to Listener/interfacer">
+      <created>1518294340069</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1518294340069</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -741,40 +737,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Data Grabber/Database.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="34" lean-forward="false" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
-          <folding>
-            <marker date="1517689092831" expanded="true" signature="571:616" ph="INSERT INTO logging... " />
-            <marker date="1517689092831" expanded="true" signature="899:947" ph="SELECT * FRO... logging" />
-            <marker date="1517689092831" expanded="true" signature="899:1002" ph="SELECT * FRO... logging" />
-            <marker date="1517689092831" expanded="true" signature="899:1010" ph="SELECT * FRO... logging" />
-            <marker date="1517689092831" expanded="true" signature="1262:1285" ph="SELECT * FRO... logging" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/nginx-conf/nginx.conf">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Data Grabber/Listener.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="8" lean-forward="false" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/HTML/js/app.jsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1485">
-          <caret line="99" column="79" lean-forward="false" selection-start-line="99" selection-start-column="38" selection-end-line="99" selection-end-column="79" />
           <folding />
         </state>
       </provider>
@@ -784,7 +750,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -800,15 +766,45 @@
     <entry file="file://$PROJECT_DIR$/HTML/js/listener-test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data Grabber/Listener.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="8" lean-forward="false" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HTML/js/app.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="99" column="79" lean-forward="false" selection-start-line="99" selection-start-column="38" selection-end-line="99" selection-end-column="79" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Data Grabber/Database.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="39" column="34" lean-forward="false" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
+          <folding>
+            <marker date="1517689092831" expanded="true" signature="571:616" ph="INSERT INTO logging... " />
+            <marker date="1517689092831" expanded="true" signature="899:947" ph="SELECT * FRO... logging" />
+            <marker date="1517689092831" expanded="true" signature="899:1002" ph="SELECT * FRO... logging" />
+            <marker date="1517689092831" expanded="true" signature="899:1010" ph="SELECT * FRO... logging" />
+            <marker date="1517689092831" expanded="true" signature="1262:1285" ph="SELECT * FRO... logging" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Data Grabber/interfacer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="38" column="5" lean-forward="false" selection-start-line="38" selection-start-column="5" selection-end-line="38" selection-end-column="5" />
+        <state relative-caret-position="510">
+          <caret line="34" column="50" lean-forward="true" selection-start-line="34" selection-start-column="50" selection-end-line="34" selection-end-column="50" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
