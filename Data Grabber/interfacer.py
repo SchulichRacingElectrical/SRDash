@@ -53,7 +53,7 @@ def main():
     logger = logging.getLogger('PYTOP')
     filtered_devices = get_available_devices()
     print(filtered_devices)
-    r = re.compile(".*ttyACM0")
+    r = re.compile(".*ttyACM")
     filtered_devices = filter(r.match, filtered_devices)
 
     device = next(filtered_devices)
