@@ -88,7 +88,7 @@ def main():
         row = ser.readline()
         print(row)
         if row is not None and b"{\"s\":{" in row:
-            row_json = json.loads(row)
+            row_json = json.loads(row.decode('utf-8'))
             raw_data = row_json['s']['d']
             row_list = []
             row_list.append(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%m"))
