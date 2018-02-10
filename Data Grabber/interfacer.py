@@ -8,7 +8,7 @@ import time
 import requests
 import serial
 print(serial.__path__)
-from serial.tools import list_ports
+from serial import tools
 
 PUB_ENDPOINT = 'http://localhost:8081/pub'
 STATS_CHANNEL = 'system_stats'
@@ -20,7 +20,7 @@ SystemInfo = collections.namedtuple(
 
 
 def get_available_devices():
-    devices = [x[0] for x in list_ports.comports()]
+    devices = [x[0] for x in tools.list_ports.comports()]
     devices.sort()
     return devices
 
