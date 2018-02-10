@@ -76,7 +76,7 @@ def main():
         columns.append(l['nm'])
 
     # '"{"setTelemetry":{"rate":1}}'
-    ser.write(b'{"setTelemetry":{"rate":10}}\r\n')
+    ser.write(b'{"setTelemetry":{"rate":1}}\r\n')
     #ser.write(b'{"setTelemetry":{"rc":1}}\r\n')
 
 
