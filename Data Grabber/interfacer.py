@@ -7,7 +7,7 @@ import time
 
 import requests
 import serial
-#from Database import Database
+
 from serial.tools import list_ports
 
 PUB_ENDPOINT = 'http://localhost:8081/pub'
@@ -30,19 +30,19 @@ def get_available_devices():
 
 
 
-def top(sort_by='cpu_percent', top_n_procs=15):
-    """
-    A function that simulates the unix top command
-    :return:
-    """
-    logger = logging.getLogger('PYTOP')
-    #db = Database()
-
-    return SystemInfo(
-        measurement_date=db.get_top()[0][0],
-        x=db.get_top()[0][1],
-        y=db.get_top()[0][2]
-    )
+# def top(sort_by='cpu_percent', top_n_procs=15):
+#     """
+#     A function that simulates the unix top command
+#     :return:
+#     """
+#     logger = logging.getLogger('PYTOP')
+#     #db = Database()
+#
+#     return SystemInfo(
+#         measurement_date=db.get_top()[0][0],
+#         x=db.get_top()[0][1],
+#         y=db.get_top()[0][2]
+#     )
 
 
 
