@@ -1,0 +1,93 @@
+#:kivy 1.10.0
+<Display>:
+    canvas:
+        Rectangle:
+            id: myGreenRect
+            size: self.width*0.96,self.height*0.22
+            pos:self.width*0.02,self.height*0.73
+            source: self.img
+
+        Color:
+            rgba: 0,0,0,1
+        Rectangle:
+            id: myBigBlackRect
+            size: self.width*0.96,self.height*0.22
+            pos: self.width*0.02+self.rpm*0.00009524*self.width*0.96, self.height*0.73
+
+        Color:
+            rgba: 1,0,0,1
+        Rectangle: #First Light
+            size:self.width*0.09,self.height*0.15
+            pos:self.width*0.35, self.height*0.1
+
+        Color:
+            rgba: 0,1,0,1
+        Rectangle: #Second Light
+            size: self.width*0.09, self.height*0.15
+            pos:self.width*0.55, self.height*0.1
+
+
+    FloatLayout:
+        id: myFloatLayout
+        size: root.size
+
+        Label:  #Engine Temp- value
+            font_size: 40*(root.height+root.width)/800
+            text: str(root.eng_temp)
+            pos_hint:{"center_x":0.15,"center_y":0.5}
+            size_hint: 0.15,0.15
+
+        Label:  #Engine Temp- name
+            font_size: 20*(root.height+root.width)/800
+            text: "Engine Temp"
+            pos_hint:{"center_x":0.15,"center_y":0.65}
+            size_hint: 0.15,0.15
+
+        Label: #Air Temp
+            font_size: 40*(root.height+root.width)/800
+            text: str(root.air_temp)
+            pos_hint:{"center_x":0.15,"center_y":0.15}
+            size_hint: 0.15,0.15
+
+        Label:  #Air Temp- name
+            font_size: 20*(root.height+root.width)/800
+            text: "Air Temp"
+            pos_hint:{"center_x":0.15,"center_y":0.3}
+            size_hint: 0.15,0.15
+
+        Label: #rpm- value
+            font_size: 80*(root.height+root.width)/800
+            text: str(root.rpm)
+            pos_hint: {"center_x":0.5,"center_y":0.45}
+            size_hint: 0.15,0.15
+
+        Label:  #rpm- name
+            font_size: 40*(root.height+root.width)/800
+            text: "RPM"
+            pos_hint:{"center_x":0.5,"center_y":0.65}
+            size_hint: 0.15,0.15
+
+        Label: #speed- value
+            font_size: 40*(root.height+root.width)/800
+            text: str(root.speed)
+            pos_hint:{"center_x":0.87,"center_y":0.15}
+            size_hint: 0.15,0.15
+
+        Label:  #speed- name
+            font_size: 20*(root.height+root.width)/800
+            text: "Speed"
+            pos_hint:{"center_x":0.87,"center_y":0.3}
+            size_hint: 0.15,0.15
+
+        Label: #gear- value
+            font_size: 80*(root.height+root.width)/800
+            text: str(root.gear)
+            pos_hint:{"center_x":0.87,"center_y":0.5}
+            size_hint: 0.15,0.15
+
+        Label:  #gear- name
+            font_size: 25*(root.height+root.width)/800
+            text: "Gear"
+            pos_hint:{"center_x":0.87,"center_y":0.67}
+            size_hint: 0.15,0.15
+
