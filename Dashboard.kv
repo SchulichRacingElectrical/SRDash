@@ -30,28 +30,34 @@
     FloatLayout:
         id: myFloatLayout
         size: root.size
+        Label: #DAQ Missing Error
+            font_size: 40*(root.height+root.width)/800
+            text: str(root.DAQ_Missing)
+            pos_hint:{"center_x":0.5,"center_y":0.8}
+            color: 3,0,0,1
+            size_hint: 0.15,0.15
 
         Label:  #Engine Temp- value
             font_size: 40*(root.height+root.width)/800
-            text: str(root.eng_temp)
+            text: str(root.coolantTemp)
             pos_hint:{"center_x":0.15,"center_y":0.5}
             size_hint: 0.15,0.15
 
         Label:  #Engine Temp- name
             font_size: 20*(root.height+root.width)/800
-            text: "Engine Temp"
+            text: "Coolant Temp"
             pos_hint:{"center_x":0.15,"center_y":0.65}
             size_hint: 0.15,0.15
 
         Label: #Air Temp
             font_size: 40*(root.height+root.width)/800
             text: str(root.air_temp)
-            pos_hint:{"center_x":0.15,"center_y":0.15}
+            pos_hint:{"center_x":0.18,"center_y":0.15}
             size_hint: 0.15,0.15
 
         Label:  #Air Temp- name
             font_size: 20*(root.height+root.width)/800
-            text: "Air Temp"
+            text: "AFR"
             pos_hint:{"center_x":0.15,"center_y":0.3}
             size_hint: 0.15,0.15
 
@@ -67,27 +73,27 @@
             pos_hint:{"center_x":0.5,"center_y":0.65}
             size_hint: 0.15,0.15
 
-        Label: #speed- value
+        Label: #OilPressure - value
             font_size: 40*(root.height+root.width)/800
-            text: str(root.speed)
+            text: str(root.oilPress)
             pos_hint:{"center_x":0.87,"center_y":0.15}
             size_hint: 0.15,0.15
 
-        Label:  #speed- name
+        Label:  #OilPressure- name
             font_size: 20*(root.height+root.width)/800
-            text: "Speed"
+            text: "Pressure"
             pos_hint:{"center_x":0.87,"center_y":0.3}
             size_hint: 0.15,0.15
 
-        Label: #gear- value
+        Label: #oilTemp- value
             font_size: 80*(root.height+root.width)/800
-            text: str(root.gear)
+            text: str(root.oilTemp)
             pos_hint:{"center_x":0.87,"center_y":0.5}
             size_hint: 0.15,0.15
 
-        Label:  #gear- name
+        Label:  #oilTemp- name
             font_size: 25*(root.height+root.width)/800
-            text: "Gear"
-            pos_hint:{"center_x":0.87,"center_y":0.67}
+            text: "Oil Temp"
+            pos_hint:{"center_x":0.82,"center_y":0.67}
             size_hint: 0.15,0.15
 
