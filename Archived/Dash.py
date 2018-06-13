@@ -36,8 +36,8 @@ init_oilPress = -45
 current_gear = 999
 init_oilTemp = -45
 Builder.load_file("Dashboard.kv")
-PUB_ENDPOINT = 'http://10.142.0.3:8080/pub'
-ANALYTICS_CHANNEL = 'schulich_analytics'
+#PUB_ENDPOINT = 'http://10.142.0.3:8080/pub'
+#ANALYTICS_CHANNEL = 'schulich_analytics'
 
 """
 ################TO DO LIST################

@@ -17,8 +17,10 @@ lowerRightLabel = 'FUEL T'
 lowerRightValue = 0.0
 
 
-class MyFirstGUI:
+class DashGUI:
     def __init__(self, master):
+        self.data = None
+        # GUI Variables
         self.master = master
         master.title("SR19 GUI")
         master.geometry('{}x{}'.format(800, 480))
@@ -127,7 +129,7 @@ class MyFirstGUI:
 
     def init_rpmbar(self, master):
         self.rpmBarBG = self.canvas.create_rectangle(0, 0, 800, 80, fill='black')
-        self.rpmBar = self.canvas.create_rectangle(0,0,800,80, fill='black')
+        self.rpmBar = self.canvas.create_rectangle(0, 0, 800, 80, fill='black')
 
         # self.rpmBar.grid(column=0, row=0, columnspan=3, sticky=W)
         # self.canvas.tag_lower(self.rpmBar)
@@ -136,39 +138,22 @@ class MyFirstGUI:
         self.circle = self.canvas.create_oval(-200, 20, 1600, 160, fill='green', outline='green')
         self.blocker1 = self.canvas.create_rectangle(0, 80, 800, 360, fill='black', outline='black')
         self.canvas.tag_raise(self.rpmBar)
-        self.horizontalRedLine1 = self.canvas.create_line(0,80,800,80,width=5,fill='red')
+        self.horizontalRedLine1 = self.canvas.create_line(0, 80, 800, 80, width=5, fill='red')
         self.canvas.tag_raise(self.horizontalRedLine1)
 
-
-    def rpmupdate(self, rpm):
-        if rpm < rpmmax:
-            self.canvas.coords(self.rpmBar, round(rpm), 0, round(rpm / 111)+800, 80)
-        else:
-            self.canvas.coords(self.rpmBar, round(rpmmax), 0, round(rpmmax / 111)+800, 80)
+    def updateRPM(self, value):
+        # TODO: FIX Update
+        self.canvas.coords(self.rpmBar, round(value), 0, round(value / 111) + 800, 80)
 
     def greet(self):
         print("Greetings!")
 
+    def update(self, data):
+        # TODO: IMPLEMENT UPDATES FOR GUI ELEMENTS
+        self.updateRPM(data["rpm"])
+        # self.updateWater(data["water")
+        # self.updateAFR(data["afr")
+        # self.updateSpeed(data["speed")
+        # self.updateOilTemp(data["oilTemp")
+        # self.updateFuelTemp(data["fuelTemp")
 
-def main():
-    root = Tk()
-    my_gui = MyFirstGUI(root)
-    my_gui.init_all_frames(root)
-    my_gui.init_all_dials(root)
-    my_gui.init_rpmbar(root)
-    my_gui.draw_aesthetics(root)
-    rpm = 0
-    try:
-        while True:
-            my_gui.rpmupdate(rpm)
-            rpm = rpm + 1
-            if rpm >= rpmmax:
-                rpm = 0
-            root.update()
-    except TclError:
-        print('TKInter frame closed: {}'.format(traceback.print_exc(file=sys.stdout)))
-        exit()
-
-
-if __name__ == '__main__':
-    main()
