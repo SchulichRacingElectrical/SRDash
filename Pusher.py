@@ -9,5 +9,6 @@ class Pusher:
         self.topic_path = self.publisher.topic_path(project, topic_name)
 
     def publish(self, data):
+        print(data)
         self.publisher.publish(self.topic_path, data=data)
 
