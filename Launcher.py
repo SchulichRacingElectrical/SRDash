@@ -7,7 +7,9 @@ from tkinter import Tk, TclError
 
 from DashGUI import DashGUI, sys
 from Process import Process
-#from Pusher import Pusher
+
+
+# from Pusher import Pusher
 
 
 class Launcher:
@@ -21,23 +23,25 @@ class Launcher:
         self.publisher_loop = None
         self.publisher = None
         self.data = {'timestamp': 0, 'interval': 0, 'battery': 12.3, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0,
-                'pitch': 0,
-                'roll': 0, 'rpm': 000, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 14.7, 'coolantTemperature': 115, 'iat': 0,
-                'oilTemperature': 111, 'gear': 0, 'speed': 120, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0,
-                'rearRight': 0,
-                'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 12, 'baro': 0, 'altitude': 0, 'session': 0,
-                'lambda': 0}
+                     'pitch': 0,
+                     'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0,
+                     'iat': 0,
+                     'oilTemperature': 0, 'gear': 0, 'speed': 120, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0,
+                     'rearRight': 0,
+                     'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0,
+                     'session': 0,
+                     'lambda': 0}
         self.start_time = 0
         self.connectToDAQ()
         self.launchGUI()
 
-        #Setting up Threading
+        # Setting up Threading
         self.worker_loop = asyncio.new_event_loop()
         worker = threading.Thread(target=self.start_worker, args=(self.worker_loop,))
         worker.start()
 
         # TODO: ADD CLOUD CAPABILITY
-        #self.connectToCloud()
+        # self.connectToCloud()
 
     def launchGUI(self):
         self.root = Tk()
@@ -46,7 +50,6 @@ class Launcher:
         self.dash.init_all_dials(self.root)
         self.dash.init_rpmbar(self.root)
         self.dash.draw_aesthetics(self.root)
-        rpm = 0
 
     # TODO: ADD CLOUD CAPABILITY
     # def connectToCloud(self):
@@ -72,7 +75,6 @@ class Launcher:
         asyncio.set_event_loop(loop)
         loop.run_forever()
 
-
     def start_worker_publisher(self, loop):
         """Switch to new event loop and run forever"""
         asyncio.set_event_loop(loop)
@@ -81,17 +83,19 @@ class Launcher:
     def update(self):
         # DAQ is not connected. Continuing trying until connection established
         # TODO: COMMENT BEFORE DEPLOYING ON CAR
-        """ START DEBUGGING """
-        self.data["rpm"] = self.data["rpm"]+40
-        self.data["coolantTemperature"] = self.data["coolantTemperature"]
-        self.data["afr"] = self.data["afr"]
-        self.data["speed"] = self.data["speed"]
-        self.data["battery"] = self.data["battery"]
-        self.data["oilTemperature"] = self.data["oilTemperature"]
-        self.data["fuelTemp"] = self.data["fuelTemp"]
-        self.dash.update(self.data)
-        self.root.update()
-        """" END DEBUGGING """
+        # """ START DEBUGGING """
+        # if self.data["rpm"] >= 15000:
+        #     self.data["rpm"] = 0
+        # self.data["rpm"] = self.data["rpm"] + 40
+        # self.data["coolantTemperature"] = self.data["coolantTemperature"]
+        # self.data["afr"] = self.data["afr"]
+        # self.data["speed"] = self.data["speed"]
+        # self.data["battery"] = self.data["battery"]
+        # self.data["oilTemperature"] = self.data["oilTemperature"]
+        # self.data["fuelTemp"] = self.data["fuelTemp"]
+        # self.dash.update(self.data)
+        # self.root.update()
+        # """" END DEBUGGING """
         if not self.connected:
             elapsed_time = time.time() - self.start_time
             if elapsed_time > self.TIMEOUT:

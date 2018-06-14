@@ -10,7 +10,8 @@ class DashGUI:
         master.title("SR19 GUI")
         master.geometry('{}x{}'.format(800, 480))
         master.resizable(width=False, height=False)
-        self.rpmpng = PhotoImage(file="RPM Guage.png")
+        self.rpmpng = PhotoImage(file="RPM_Gauge.png")
+        self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
         self.rpmmax = 12400
         # CONFIGURATION
         self.upperLeftDict = "coolantTemperature"
@@ -134,7 +135,6 @@ class DashGUI:
         self.lowerRightValue.config(font=(font, bigFontSize))
 
     def init_rpmbar(self, master):
-        pass
         self.rpmBarBG = self.canvas.create_rectangle(0, 0, 800, 140, fill='black')
         self.rpmBar = self.canvas.create_rectangle(0, 0, 800, 120, fill='black')
         self.rpmVal = self.canvas.create_text(160, 40, fill='white', font=('arial', 60), text='0')
@@ -143,7 +143,7 @@ class DashGUI:
         # self.canvas.tag_lower(self.rpmBar)
 
     def draw_aesthetics(self, master):
-        self.rpmimage = self.canvas.create_image(400, 70, image=self.rpmpng)
+        self.rpmimage = self.canvas.create_image(400, 70, image=self.rpmpng, tags="rpmGauge")
         # self.circle = self.canvas.create_oval(-200, 20, 1600, 160, fill='green', outline='green')
         self.blocker1 = self.canvas.create_rectangle(0, 160, 800, 360, fill='black', outline='black')
         self.canvas.tag_raise(self.rpmBar)
@@ -153,7 +153,8 @@ class DashGUI:
         self.canvas.coords(self.rpmBar, round((value * 800 / 12500)), 0, 800, 120)
         # self.rpmVal.text = str(round(value))
         self.canvas.itemconfigure(self.rpmVal, text=str(round(int((value + 50) / 100) * 100)))  # Rounding
-        # TODO add blinken lights
+        # TODO add blinking lights
+
 
     def updateUpLeft(self, value):
         self.upperLeftValue['text'] = round(value)
