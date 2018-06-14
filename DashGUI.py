@@ -150,40 +150,33 @@ class DashGUI:
         self.canvas.tag_raise(self.rpmVal)
 
     def updateRPM(self, value):
-        # TODO: FIX Update
         self.canvas.coords(self.rpmBar, round((value * 800 / 12500)), 0, 800, 120)
         # self.rpmVal.text = str(round(value))
         self.canvas.itemconfigure(self.rpmVal, text=str(round(int((value + 50) / 100) * 100)))  # Rounding
+        # TODO add blinken lights
 
     def updateUpLeft(self, value):
-        # TODO: FIX Update
         self.upperLeftValue['text'] = round(value)
 
     def updateLowLeft(self, value):
-        # TODO: FIX Update
         self.lowerLeftValue['text'] = round(value, 1)
 
     def updateUpCen(self, value):
-        # TODO: FIX Update
         self.upperCentreValue['text'] = round(value)
 
     def updateLowCen(self, value):
-        # TODO: FIX Update
         self.lowerCentreValue['text'] = round(value, 1)
 
     def updateUpRight(self, value):
-        # TODO: FIX Update
         self.upperRightValue['text'] = round(value)
 
     def updateLowRight(self, value):
-        # TODO: FIX Update
         self.lowerRightValue['text'] = round(value)
 
     def greet(self):
         print("Greetings!")
 
     def update(self, data):
-        # TODO: IMPLEMENT UPDATES FOR GUI ELEMENTS
         self.updateRPM(data["rpm"])
         self.updateUpLeft(data[self.upperLeftDict])
         self.updateLowLeft(data[self.lowerLeftDict])
