@@ -83,6 +83,11 @@ class Launcher:
         # TODO: COMMENT BEFORE DEPLOYING ON CAR
         """ START DEBUGGING """
         self.data["rpm"] = self.data["rpm"] + 1
+        self.data["coolantTemperature"] = self.data["coolantTemperature"] + 1
+        self.data["afr"] = self.data["afr"] + 1
+        self.data["speed"] = self.data["speed"] + 1
+        self.data["oilTemperature"] = self.data["oilTemperature"] + 1
+        self.data["fuelTemp"] = self.data["fuelTemp"] + 1
         self.dash.update(self.data)
         self.root.update()
         """" END DEBUGGING """
