@@ -2,7 +2,6 @@ import traceback
 from tkinter import *
 
 
-
 class DashGUI:
     def __init__(self, master):
         self.data = None
@@ -11,7 +10,7 @@ class DashGUI:
         master.title("SR19 GUI")
         master.geometry('{}x{}'.format(800, 480))
         master.resizable(width=False, height=False)
-        self.rpmpng = PhotoImage(file="RPM GuageWithNum.png")
+        self.rpmpng = PhotoImage(file="RPM Guage.png")
         self.rpmmax = 12400
         # CONFIGURATION
         self.upperLeftDict = "coolantTemperature"
@@ -20,11 +19,11 @@ class DashGUI:
         self.lowerLeftDict = "afr"
         self.lowerLeftLabel = 'AFR'
         self.lowerLeftValue = 0.0
-        self.upperCentreDict = "rpm"
-        self.upperCentreLabel = 'RPM'
+        self.upperCentreDict = "speed"
+        self.upperCentreLabel = 'SPEED'
         self.upperCentreValue = 0.0
-        self.lowerCentreDict = "speed"
-        self.lowerCentreLabel = 'SPEED'
+        self.lowerCentreDict = "battery"
+        self.lowerCentreLabel = 'BATT'
         self.lowerCentreValue = 0.0
         self.upperRightDict = "oilTemperature"
         self.upperRightLabel = 'OIL T'
@@ -33,16 +32,14 @@ class DashGUI:
         self.lowerRightLabel = 'FUEL T'
         self.lowerRightValue = 0.0
 
-
-
     def init_all_frames(self, master):
         self.masterFrame = Frame(master, width=800, height=480, bd=0, relief=FLAT, background='black')
         self.masterFrame.grid(column=0, row=0, columnspan=3, rowspan=2, sticky=N + E + S + W)
 
-        self.rpmFrame = Frame(self.masterFrame, width=800, height=122, bd=0, relief=FLAT, background='black')
+        self.rpmFrame = Frame(self.masterFrame, width=800, height=142, bd=0, relief=FLAT, background='black')
         self.rpmFrame.grid(column=0, row=0, columnspan=3, sticky=W)
 
-        self.canvas = Canvas(self.rpmFrame, width=800, height=122, highlightthickness=0)
+        self.canvas = Canvas(self.rpmFrame, width=800, height=142, highlightthickness=0)
         self.canvas.grid(column=0, row=0, columnspan=3, sticky=W)
         self.canvas.create_line(0, 0, 200, 100, fill="red", dash=(4, 4))
 
@@ -62,10 +59,10 @@ class DashGUI:
         width = -1
         height = 1
         font = 'Arial'
-        padx = 60
+        padx = 50
         pady = 5
         smallFontSize = 18
-        bigFontSize = 72
+        bigFontSize = 60
         # self.canvas.create_rectangle(0, 0, 800, 40, fill='black')
 
         self.bottomBar = Button(self.bottomFrame, width=113, height=7, background='black')
@@ -86,12 +83,12 @@ class DashGUI:
                                       background='black',
                                       foreground='white')
         self.upperCentreLabel.grid(column=0, row=0, sticky=N)
-        self.upperCentreLabel.config(font=(font, smallFontSize+14))
+        self.upperCentreLabel.config(font=(font, smallFontSize))
         self.upperCentreValue = Label(self.centreFrame, text=self.upperCentreValue, height=height, pady=pady, padx=padx,
                                       background='black',
                                       foreground='white')
         self.upperCentreValue.grid(column=0, row=1, sticky=N)
-        self.upperCentreValue.config(font=(font, bigFontSize))
+        self.upperCentreValue.config(font=(font, bigFontSize + 12))
 
         self.upperRightLabel = Label(self.rightFrame, text=self.upperRightLabel, width=width, padx=padx, pady=pady,
                                      background='black',
@@ -138,45 +135,49 @@ class DashGUI:
 
     def init_rpmbar(self, master):
         pass
-        self.rpmBarBG = self.canvas.create_rectangle(0, 0, 800, 120, fill='black')
+        self.rpmBarBG = self.canvas.create_rectangle(0, 0, 800, 140, fill='black')
         self.rpmBar = self.canvas.create_rectangle(0, 0, 800, 120, fill='black')
+        self.rpmVal = self.canvas.create_text(160, 40, fill='white', font=('arial', 60), text='0')
 
         # self.rpmBar.grid(column=0, row=0, columnspan=3, sticky=W)
         # self.canvas.tag_lower(self.rpmBar)
 
     def draw_aesthetics(self, master):
-        self.rpmimage = self.canvas.create_image(400,60, image=self.rpmpng)
+        self.rpmimage = self.canvas.create_image(400, 70, image=self.rpmpng)
         # self.circle = self.canvas.create_oval(-200, 20, 1600, 160, fill='green', outline='green')
-        self.blocker1 = self.canvas.create_rectangle(0, 120, 800, 360, fill='black', outline='black')
+        self.blocker1 = self.canvas.create_rectangle(0, 160, 800, 360, fill='black', outline='black')
         self.canvas.tag_raise(self.rpmBar)
+        self.canvas.tag_raise(self.rpmVal)
 
     def updateRPM(self, value):
         # TODO: FIX Update
-        self.canvas.coords(self.rpmBar, round(value), 0, round(value / 111) + 800, 120)
+        self.canvas.coords(self.rpmBar, round((value * 800 / 12500)), 0, 800, 120)
+        # self.rpmVal.text = str(round(value))
+        self.canvas.itemconfigure(self.rpmVal, text=str(round(int((value + 50) / 100) * 100)))  # Rounding
 
     def updateUpLeft(self, value):
         # TODO: FIX Update
-        self.upperLeftValue = value
+        self.upperLeftValue['text'] = round(value)
 
     def updateLowLeft(self, value):
         # TODO: FIX Update
-        self.lowerLeftValue = value
+        self.lowerLeftValue['text'] = round(value, 1)
 
     def updateUpCen(self, value):
         # TODO: FIX Update
-        self.upperCentreValue = value
+        self.upperCentreValue['text'] = round(value)
 
     def updateLowCen(self, value):
         # TODO: FIX Update
-        self.lowerCentreValue = value
+        self.lowerCentreValue['text'] = round(value, 1)
 
     def updateUpRight(self, value):
         # TODO: FIX Update
-        self.upperRightValue = value
+        self.upperRightValue['text'] = round(value)
 
     def updateLowRight(self, value):
         # TODO: FIX Update
-        self.lowerRightValue = value
+        self.lowerRightValue['text'] = round(value)
 
     def greet(self):
         print("Greetings!")
@@ -190,4 +191,3 @@ class DashGUI:
         self.updateLowCen(data[self.lowerCentreDict])
         self.updateUpRight(data[self.upperRightDict])
         self.updateLowRight(data[self.lowerRightDict])
-
