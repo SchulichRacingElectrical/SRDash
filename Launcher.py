@@ -115,6 +115,7 @@ class Launcher:
             self.root.update()
             elapsed_time = time.time() - self.last_update
             if elapsed_time > self.UPDATE_TIMEOUT:
+                self.last_update = time.time()
                 self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
 
     def get_data(self):
