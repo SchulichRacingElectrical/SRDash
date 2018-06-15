@@ -202,7 +202,7 @@ class DashGUI:
     def greet(self):
         print("Greetings!")
 
-    def update(self, data):
+    def update(self, data, DAQConnected, internetConnected):
         self.updateRPM(data["rpm"])
         self.updateUpLeft(data[self.upperLeftDict])
         self.updateLowLeft(data[self.lowerLeftDict])
@@ -210,5 +210,5 @@ class DashGUI:
         self.updateLowCen(data[self.lowerCentreDict])
         self.updateUpRight(data[self.upperRightDict])
         self.updateLowRight(data[self.lowerRightDict])
-        self.setDaqStatus(data["DAQConnected"])
-        self.setNetStatus(data["InternetConnected"])
+        self.setDaqStatus(DAQConnected)
+        self.setNetStatus(internetConnected)

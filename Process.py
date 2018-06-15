@@ -6,7 +6,6 @@ from serial.tools import list_ports
 from Utilities import replace_value_with_definition, readifyData, stringMe
 import datetime
 
-
 CHANNEL_TYPE_UNKNOWN = 0
 CHANNEL_TYPE_SENSOR = 1
 CHANNEL_TYPE_IMU = 2
@@ -14,15 +13,19 @@ CHANNEL_TYPE_GPS = 3
 CHANNEL_TYPE_TIME = 4
 CHANNEL_TYPE_STATS = 5
 
+
 class SampleMetaException(Exception):
     pass
+
 
 class SampleValue(object):
     def __init__(self, value, channelMeta):
         self.value = value
         self.channelMeta = channelMeta
 
+
 STARTING_BITMAP = 1
+
 
 class ChannelMeta(object):
     DEFAULT_NAME = ''
@@ -68,6 +71,7 @@ class ChannelMetaCollection(object):
             channel_meta.fromJson(ch)
             channel_metas.append(channel_meta)
 
+
 class Process:
     device = None
     ser = None
@@ -76,15 +80,20 @@ class Process:
     metas = ChannelMetaCollection()
     writeTimeout = 3
     test_rpm = 0
-    INITIAL_DATA = {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0, 'pitch': 0,
-           'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0, 'iat': 0,
-           'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0, 'rearRight': 0,
-           'latitude': 0,  'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0, 'session': 0, 'lambda': 0}
+    INITIAL_DATA = {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0,
+                    'pitch': 0,
+                    'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0,
+                    'iat': 0,
+                    'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0,
+                    'rearRight': 0,
+                    'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0,
+                    'session': 0, 'lambda': 0}
 
     I_D = {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0, 'pitch': 0,
            'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0, 'iat': 0,
            'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0, 'rearRight': 0,
-           'latitude': 0,  'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0, 'session': 0, 'lambda': 0}
+           'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0, 'session': 0,
+           'lambda': 0}
     data = {}
 
     def __init__(self):
@@ -101,8 +110,7 @@ class Process:
         devices.sort()
         return devices
 
-    def connect(self):
-
+    def get_device(self):
         devices = self.get_available_devices()
         print(devices)
         r = None
@@ -110,10 +118,15 @@ class Process:
             r = re.compile(".*usb")
         elif platform.system() == "Linux":
             r = re.compile(".*ACM")
+        else:
+            r = re.compile(".*COM")
 
         filtered_devices = filter(r.match, devices)
 
-        deviceToConnect = next(filtered_devices)
+        return next(filtered_devices)
+
+    def connect(self):
+        deviceToConnect = self.get_device()
         print("Connected to '" + deviceToConnect + "'.")
         return deviceToConnect
 
@@ -135,7 +148,7 @@ class Process:
 
     def processData(self, dataJson):
         metas = self.metas.channel_metas
-        #print(metas)
+        # print(metas)
         channelConfigCount = len(metas)
         bitmaskFieldCount = max(0, int((channelConfigCount - 1) / 32)) + 1
 
@@ -191,6 +204,7 @@ class Process:
     def readifySamples(self):
         d = self.I_D
         samples = self.samples
+        print(len(samples))
         for sample in samples:
             sample_meta = sample.channelMeta
             # {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0, 'pitch': 0,
@@ -200,7 +214,7 @@ class Process:
 
             if sample_meta.name.lower() == "rpm":
                 d = replace_value_with_definition(d, "rpm", sample.value)
-                #d = replace_value_with_definition(d, "rpm", self.test_rpm)
+                # d = replace_value_with_definition(d, "rpm", self.test_rpm)
                 # self.test_rpm = self.test_rpm + 200
                 # if self.test_rpm > 13000:
                 #     self.test_rpm = 0
@@ -254,12 +268,12 @@ class Process:
                 d = replace_value_with_definition(d, "battery", sample.value)
         d = replace_value_with_definition(d, "timestamp", datetime.datetime.now().timestamp())
         data = readifyData(d)
-        #print(data)
+        # print(data)
         return data
 
     def getData(self):
         row = self.getLine()
-        #print(row)
+        # print(row)
         if row is not None and b"{\"s\":{" in row:
             try:
                 raw_data = stringMe(row)['s']['d']

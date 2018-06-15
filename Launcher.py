@@ -19,10 +19,13 @@ class Launcher:
     dash = None
     TIMEOUT = 5
     UPDATE_TIMEOUT = 0.05
+    PU_TIMEOUT = 10
     SRServer = None
-
+    data = {}
     def __init__(self):
         # Connection Variables
+        self.processor = None
+        self.periodic_update = time.time()
         self.last_update = time.time()
         self.connected = False
         self.internetConnected = self.have_internet()
@@ -35,7 +38,7 @@ class Launcher:
                      'oilTemperature': 0, 'gear': 0, 'speed': 120, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0,
                      'rearRight': 0,
                      'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0,
-                     'session': 0, 'lambda': 0, 'DAQConnected': 0, 'InternetConnected': 0}
+                     'session': 0, 'lambda': 0}
         self.start_time = 0
         self.connectToDAQ()
         self.connectToSRServer()
@@ -114,17 +117,14 @@ class Launcher:
         # except Exception as e:
         #         print("Not Connected to Internet")
         # """" END DEBUGGING """
-        if self.internetConnected:
-            self.data["InternetConnected"] = 1
-        else:
-            self.data["InternetConnected"] = 0
+
 
         if not self.connected:
             self.data["DAQConnected"] = 0
             elapsed_time = time.time() - self.start_time
             if elapsed_time > self.TIMEOUT:
                 self.connectToDAQ()
-            self.dash.update(self.data)
+            self.dash.update(self.data, self.connected, self.internetConnected)
             self.root.update()
         else:
             self.data["DAQConnected"] = 1
@@ -134,8 +134,21 @@ class Launcher:
                 if elapsed_time > self.UPDATE_TIMEOUT:
                     self.last_update = time.time()
                     self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
-            self.dash.update(self.data)
+            print(self.data)
+            self.dash.update(self.data, self.connected, self.internetConnected)
             self.root.update()
+        elapsed_time = time.time() - self.periodic_update
+        if elapsed_time > self.PU_TIMEOUT:
+            self.periodic_update = time.time()
+            self.internetConnected = self.have_internet()
+            if self.processor is None:
+                self.connectToDAQ()
+            else:
+                try:
+                    self.processor.get_device()
+                except Exception as e:
+                    self.connected = False
+
 
     def get_data(self):
         self.data = json.loads(self.processor.getData().decode('utf-8'))
@@ -147,6 +160,7 @@ class Launcher:
             conn.close()
             return True
         except Exception as e:
+            print("Internet not connected")
             conn.close()
             return False
 
