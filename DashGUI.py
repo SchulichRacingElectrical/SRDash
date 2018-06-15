@@ -70,7 +70,7 @@ class DashGUI:
         # self.canvas.create_rectangle(0, 0, 800, 40, fill='black')
 
         self.bottomBar = Button(self.bottomFrame, width=113, height=7, background='black')
-        self.bottomBar.grid(column=0, row=0, columnspan=3, sticky=W)
+        self.bottomBar.grid(column=0, row=0, columnspan=4, sticky=W)
 
         self.upperLeftLabel = Label(self.leftFrame, text=self.upperLeftLabel, width=width, padx=padx, pady=pady,
                                     background='black',
@@ -137,6 +137,13 @@ class DashGUI:
         self.lowerRightValue.grid(column=0, row=3, sticky=E)
         self.lowerRightValue.config(font=(font, bigFontSize))
 
+        #Statusbar
+        self.daqstatusindicator = Button(self.bottomFrame, text='DAQ: ' ,width = 8, padx=padx, pady=0, fg = 'white', background = 'red')
+        self.daqstatusindicator.grid(column=0, row=0, sticky=N+W)
+
+        self.netstatusindicator = Button(self.bottomFrame, text='NET: ' ,width=8, padx=padx, pady=0, fg = 'white', background='red')
+        self.netstatusindicator.grid(column=2, row=0, sticky=N+E)
+
     def init_rpmbar(self, master):
         self.rpmBarBG = self.canvas.create_rectangle(0, 0, 800, 140, fill='black')
         self.rpmBar = self.canvas.create_rectangle(0, 0, 800, 120, fill='black')
@@ -157,6 +164,22 @@ class DashGUI:
         # self.rpmVal.text = str(round(value))
         self.canvas.itemconfigure(self.rpmVal, text=str(round(int((value + 50) / 100) * 100)))  # Rounding
         # TODO add blinking lights
+
+    def setDaqStatus(self, status):
+        if status == True:
+            self.daqstatusindicator['bg'] = 'lawn green'
+            self.daqstatusindicator['fg'] = 'black'
+        else:
+            self.daqstatusindicator['bg'] = 'red'
+            self.daqstatusindicator['fg'] = 'white'
+
+    def setNetStatus(self, status):
+        if status == True:
+            self.netstatusindicator['bg'] = 'lawn green'
+            self.netstatusindicator['fg'] = 'black'
+        else:
+            self.netstatusindicator['bg'] = 'red'
+            self.netstatusindicator['fg'] = 'white'
 
     def updateUpLeft(self, value):
         self.upperLeftValue['text'] = round(value)
@@ -187,3 +210,5 @@ class DashGUI:
         self.updateLowCen(data[self.lowerCentreDict])
         self.updateUpRight(data[self.upperRightDict])
         self.updateLowRight(data[self.lowerRightDict])
+        self.setDaqStatus(data["DAQConnected"])
+        self.setNetStatus(data["InternetConnected"])
