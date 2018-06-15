@@ -4,15 +4,16 @@ import threading
 import time
 import traceback
 from tkinter import Tk, TclError
+import http.client as httplib
 
 from DashGUI import DashGUI, sys
 from Process import Process
-
 
 # from Pusher import Pusher
 from SocketPusher import Pusher
 
 
+# noinspection PyBroadException
 class Launcher:
     root = None
     dash = None
@@ -24,6 +25,7 @@ class Launcher:
         # Connection Variables
         self.last_update = time.time()
         self.connected = False
+        self.internetConnected = self.have_internet()
         self.publisher_loop = None
         self.publisher = None
         self.data = {'timestamp': 0, 'interval': 0, 'battery': 12.3, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0,
@@ -33,8 +35,7 @@ class Launcher:
                      'oilTemperature': 0, 'gear': 0, 'speed': 120, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0,
                      'rearRight': 0,
                      'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0,
-                     'session': 0,
-                     'lambda': 0}
+                     'session': 0, 'lambda': 0, 'DAQConnected': 0, 'InternetConnected': 0}
         self.start_time = 0
         self.connectToDAQ()
         self.connectToSRServer()
@@ -75,6 +76,7 @@ class Launcher:
             self.start_time = time.time()
             print("Unable to connect to DAQ")
             self.connected = False
+
     def connectToSRServer(self):
         host = "schulichracing.ddns.net"
         port = 5000
@@ -93,36 +95,60 @@ class Launcher:
         # DAQ is not connected. Continuing trying until connection established
         # TODO: COMMENT BEFORE DEPLOYING ON CAR
         # """ START DEBUGGING """
-        if self.data["rpm"] >= 15000:
-            self.data["rpm"] = 0
-        self.data["rpm"] = self.data["rpm"] + 40
-        self.data["coolantTemperature"] = self.data["coolantTemperature"]
-        self.data["afr"] = self.data["afr"]
-        self.data["speed"] = self.data["speed"]
-        self.data["battery"] = self.data["battery"]
-        self.data["oilTemperature"] = self.data["oilTemperature"]
-        self.data["fuelTemp"] = self.data["fuelTemp"]
-        self.dash.update(self.data)
-        self.root.update()
-        try:
-            elapsed_time = time.time() - self.last_update
-            if elapsed_time > self.UPDATE_TIMEOUT:
-                self.last_update = time.time()
-                self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
-        except Exception as e:
-                print("Not Connected to Internet")
+        # if self.data["rpm"] >= 15000:
+        #     self.data["rpm"] = 0
+        # self.data["rpm"] = self.data["rpm"] + 40
+        # self.data["coolantTemperature"] = self.data["coolantTemperature"]
+        # self.data["afr"] = self.data["afr"]
+        # self.data["speed"] = self.data["speed"]
+        # self.data["battery"] = self.data["battery"]
+        # self.data["oilTemperature"] = self.data["oilTemperature"]
+        # self.data["fuelTemp"] = self.data["fuelTemp"]
+        # self.dash.update(self.data)
+        # self.root.update()
+        # try:
+        #     elapsed_time = time.time() - self.last_update
+        #     if elapsed_time > self.UPDATE_TIMEOUT:
+        #         self.last_update = time.time()
+        #         self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
+        # except Exception as e:
+        #         print("Not Connected to Internet")
         # """" END DEBUGGING """
+        if self.internetConnected:
+            self.data["InternetConnected"] = 1
+        else:
+            self.data["InternetConnected"] = 0
+
         if not self.connected:
+            self.data["DAQConnected"] = 0
             elapsed_time = time.time() - self.start_time
             if elapsed_time > self.TIMEOUT:
                 self.connectToDAQ()
+            self.dash.update(self.data)
+            self.root.update()
         else:
+            self.data["DAQConnected"] = 1
             self.worker_loop.call_soon(self.get_data())
+            if self.internetConnected:
+                elapsed_time = time.time() - self.last_update
+                if elapsed_time > self.UPDATE_TIMEOUT:
+                    self.last_update = time.time()
+                    self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
             self.dash.update(self.data)
             self.root.update()
 
     def get_data(self):
         self.data = json.loads(self.processor.getData().decode('utf-8'))
+
+    def have_internet(self):
+        conn = httplib.HTTPConnection("www.google.com", timeout=1)
+        try:
+            conn.request("HEAD", "/")
+            conn.close()
+            return True
+        except Exception as e:
+            conn.close()
+            return False
 
 
 if __name__ == '__main__':
