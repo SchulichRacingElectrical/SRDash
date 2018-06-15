@@ -104,6 +104,10 @@ class Launcher:
         self.data["fuelTemp"] = self.data["fuelTemp"]
         self.dash.update(self.data)
         self.root.update()
+        elapsed_time = time.time() - self.last_update
+        if elapsed_time > self.UPDATE_TIMEOUT:
+            self.last_update = time.time()
+            self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
         # """" END DEBUGGING """
         if not self.connected:
             elapsed_time = time.time() - self.start_time
@@ -113,10 +117,6 @@ class Launcher:
             self.worker_loop.call_soon(self.get_data())
             self.dash.update(self.data)
             self.root.update()
-            elapsed_time = time.time() - self.last_update
-            if elapsed_time > self.UPDATE_TIMEOUT:
-                self.last_update = time.time()
-                self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
 
     def get_data(self):
         self.data = json.loads(self.processor.getData().decode('utf-8'))
