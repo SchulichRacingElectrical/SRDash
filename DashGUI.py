@@ -8,8 +8,10 @@ class DashGUI:
         # GUI Variables
         self.master = master
         master.title("SR19 GUI")
-        master.geometry('{}x{}'.format(800, 480))
+        pad=3
+        master.geometry('{}x{}'.format(master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
         master.resizable(width=False, height=False)
+        master.overrideredirect(True)
         self.rpmpng = PhotoImage(file="RPM_Gauge.png")
         self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
         self.rpmmax = 12400
