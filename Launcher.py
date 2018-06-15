@@ -17,7 +17,7 @@ class Launcher:
     root = None
     dash = None
     TIMEOUT = 5
-    UPDATE_TIMEOUT = 0.2
+    UPDATE_TIMEOUT = 0.05
     SRServer = None
 
     def __init__(self):
@@ -104,10 +104,13 @@ class Launcher:
         self.data["fuelTemp"] = self.data["fuelTemp"]
         self.dash.update(self.data)
         self.root.update()
-        elapsed_time = time.time() - self.last_update
-        if elapsed_time > self.UPDATE_TIMEOUT:
-            self.last_update = time.time()
-            self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
+        try:
+            elapsed_time = time.time() - self.last_update
+            if elapsed_time > self.UPDATE_TIMEOUT:
+                self.last_update = time.time()
+                self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
+        except Exception as e:
+                print("Not Connected to Internet")
         # """" END DEBUGGING """
         if not self.connected:
             elapsed_time = time.time() - self.start_time
