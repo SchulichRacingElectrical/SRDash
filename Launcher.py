@@ -10,15 +10,19 @@ from Process import Process
 
 
 # from Pusher import Pusher
+from SocketPusher import Pusher
 
 
 class Launcher:
     root = None
     dash = None
     TIMEOUT = 5
+    UPDATE_TIMEOUT = 0.2
+    SRServer = None
 
     def __init__(self):
         # Connection Variables
+        self.last_update = time.time()
         self.connected = False
         self.publisher_loop = None
         self.publisher = None
@@ -33,6 +37,7 @@ class Launcher:
                      'lambda': 0}
         self.start_time = 0
         self.connectToDAQ()
+        self.connectToSRServer()
         self.launchGUI()
 
         # Setting up Threading
@@ -70,6 +75,10 @@ class Launcher:
             self.start_time = time.time()
             print("Unable to connect to DAQ")
             self.connected = False
+    def connectToSRServer(self):
+        host = "schulichracing.ddns.net"
+        port = 5000
+        self.SRServer = Pusher(host, port)
 
     def start_worker(self, loop):
         asyncio.set_event_loop(loop)
@@ -84,17 +93,17 @@ class Launcher:
         # DAQ is not connected. Continuing trying until connection established
         # TODO: COMMENT BEFORE DEPLOYING ON CAR
         # """ START DEBUGGING """
-        # if self.data["rpm"] >= 15000:
-        #     self.data["rpm"] = 0
-        # self.data["rpm"] = self.data["rpm"] + 40
-        # self.data["coolantTemperature"] = self.data["coolantTemperature"]
-        # self.data["afr"] = self.data["afr"]
-        # self.data["speed"] = self.data["speed"]
-        # self.data["battery"] = self.data["battery"]
-        # self.data["oilTemperature"] = self.data["oilTemperature"]
-        # self.data["fuelTemp"] = self.data["fuelTemp"]
-        # self.dash.update(self.data)
-        # self.root.update()
+        if self.data["rpm"] >= 15000:
+            self.data["rpm"] = 0
+        self.data["rpm"] = self.data["rpm"] + 40
+        self.data["coolantTemperature"] = self.data["coolantTemperature"]
+        self.data["afr"] = self.data["afr"]
+        self.data["speed"] = self.data["speed"]
+        self.data["battery"] = self.data["battery"]
+        self.data["oilTemperature"] = self.data["oilTemperature"]
+        self.data["fuelTemp"] = self.data["fuelTemp"]
+        self.dash.update(self.data)
+        self.root.update()
         # """" END DEBUGGING """
         if not self.connected:
             elapsed_time = time.time() - self.start_time
@@ -104,6 +113,9 @@ class Launcher:
             self.worker_loop.call_soon(self.get_data())
             self.dash.update(self.data)
             self.root.update()
+            elapsed_time = time.time() - self.last_update
+            if elapsed_time > self.UPDATE_TIMEOUT:
+                self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
 
     def get_data(self):
         self.data = json.loads(self.processor.getData().decode('utf-8'))

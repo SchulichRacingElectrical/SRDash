@@ -250,6 +250,8 @@ class Process:
                 d = replace_value_with_definition(d, "oilPressure", sample.value)
             elif sample_meta.name.lower() == "oiltemp":
                 d = replace_value_with_definition(d, "oilTemperature", sample.value)
+            elif sample_meta.name.lower() == "battery":
+                d = replace_value_with_definition(d, "battery", sample.value)
         d = replace_value_with_definition(d, "timestamp", datetime.datetime.now().timestamp())
         data = readifyData(d)
         #print(data)

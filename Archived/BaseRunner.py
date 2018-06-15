@@ -1,7 +1,7 @@
 import sys
 from time import sleep
 from Process import Process
-from DashPusher import DashPusher
+from SocketPusher import DashPusher
 from subprocess import call
 import threading
 import asyncio

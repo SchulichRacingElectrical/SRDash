@@ -13,9 +13,9 @@ from kivy.core.window import Window
 from kivy.config import Config
 import threading
 
-from DashPusher import DashPusher
+from SocketPusher import DashPusher
 from Process import Process
-from Pusher import Pusher
+from CloudPusher import Pusher
 from Utilities import readifyData
 import time
 import logging
@@ -114,7 +114,7 @@ class Display(Widget):
     publisher_loop = None
     publisher = None
     logOnCloud = True
-    s = requests.Session()
+    #s = requests.Session()
     dPusher = DashPusher(5001)
 
     def __init__(self, **kwargs):

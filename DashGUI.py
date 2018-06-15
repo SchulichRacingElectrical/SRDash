@@ -12,9 +12,9 @@ class DashGUI:
         master.geometry('{}x{}'.format(master.winfo_screenwidth() - pad, master.winfo_screenheight() - pad))
         master.resizable(width=False, height=False)
         master.overrideredirect(True)
-        master.config(cursor="none")
-        self.rpmpng = PhotoImage(file="RPM_Gauge.png")
-        self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
+        #master.config(cursor="none")
+        self.rpmpng = PhotoImage(file="/home/pi/Production/RPM_Gauge.png")
+        #self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
         self.rpmmax = 12400
         # CONFIGURATION
         self.upperLeftDict = "coolantTemperature"

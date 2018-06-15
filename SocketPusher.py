@@ -7,7 +7,7 @@ import socket
 """
 
 
-class DashPusher:
+class Pusher:
     # Fields
     clientSocket = None
     host = None
@@ -15,9 +15,9 @@ class DashPusher:
     server_address = None
 
     # DashPusher constructor - establishes socket connection
-    def __init__(self, port):
+    def __init__(self, host, port):
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.host = socket.gethostname()
+        self.host = host
         self.port = port
         self.server_address = (self.host, self.port)
 

@@ -1,10 +1,10 @@
 import sys
 
 import time
-from Pusher import Pusher
+from CloudPusher import Pusher
 from Utilities import readifyData, stringMe
 from Process import Process
-from DashPusher import DashPusher
+from SocketPusher import DashPusher
 from subprocess import call
 import threading
 import asyncio
