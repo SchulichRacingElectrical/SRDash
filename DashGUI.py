@@ -8,10 +8,11 @@ class DashGUI:
         # GUI Variables
         self.master = master
         master.title("SR19 GUI")
-        pad=3
-        master.geometry('{}x{}'.format(master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
+        pad = 0
+        master.geometry('{}x{}'.format(master.winfo_screenwidth() - pad, master.winfo_screenheight() - pad))
         master.resizable(width=False, height=False)
         master.overrideredirect(True)
+        master.config(cursor="none")
         self.rpmpng = PhotoImage(file="RPM_Gauge.png")
         self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
         self.rpmmax = 12400
@@ -156,7 +157,6 @@ class DashGUI:
         # self.rpmVal.text = str(round(value))
         self.canvas.itemconfigure(self.rpmVal, text=str(round(int((value + 50) / 100) * 100)))  # Rounding
         # TODO add blinking lights
-
 
     def updateUpLeft(self, value):
         self.upperLeftValue['text'] = round(value)

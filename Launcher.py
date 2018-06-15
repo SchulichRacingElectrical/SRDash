@@ -103,6 +103,7 @@ class Launcher:
         else:
             self.worker_loop.call_soon(self.get_data())
             self.dash.update(self.data)
+            self.root.update()
 
     def get_data(self):
         self.data = json.loads(self.processor.getData().decode('utf-8'))
