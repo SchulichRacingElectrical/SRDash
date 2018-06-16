@@ -13,8 +13,8 @@ class DashGUI:
         master.resizable(width=False, height=False)
         master.overrideredirect(True)
         #master.config(cursor="none")
-        #self.rpmpng = PhotoImage(file="/home/pi/Production/RPM_Gauge.png")
-        self.rpmpng = PhotoImage(file="RPM_Gauge.png")
+        self.rpmpng = PhotoImage(file="/home/pi/Production/RPM_Gauge.png")
+        #self.rpmpng = PhotoImage(file="RPM_Gauge.png")
 
         #self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
         self.rpmmax = 12400
@@ -39,13 +39,13 @@ class DashGUI:
         self.lowerRightValue = 0.0
 
     def init_all_frames(self, master):
-        self.masterFrame = Frame(master, width=800, height=480, bd=0, relief=FLAT, background='black')
+        self.masterFrame = Frame(master, width=780, height=480, bd=0, relief=FLAT, background='black')
         self.masterFrame.grid(column=0, row=0, columnspan=3, rowspan=2, sticky=N + E + S + W)
 
-        self.rpmFrame = Frame(self.masterFrame, width=800, height=142, bd=0, relief=FLAT, background='black')
+        self.rpmFrame = Frame(self.masterFrame, width=780, height=142, bd=0, relief=FLAT, background='black')
         self.rpmFrame.grid(column=0, row=0, columnspan=3, sticky=W)
 
-        self.canvas = Canvas(self.rpmFrame, width=800, height=142, highlightthickness=0)
+        self.canvas = Canvas(self.rpmFrame, width=780, height=142, highlightthickness=0)
         self.canvas.grid(column=0, row=0, columnspan=3, sticky=W)
         self.canvas.create_line(0, 0, 200, 100, fill="red", dash=(4, 4))
 
@@ -65,7 +65,7 @@ class DashGUI:
         width = -1
         height = 1
         font = 'Arial'
-        padx = 50
+        padx = 30
         pady = 5
         smallFontSize = 18
         bigFontSize = 60
@@ -147,8 +147,8 @@ class DashGUI:
         self.netstatusindicator.grid(column=2, row=0, sticky=N+E)
 
     def init_rpmbar(self, master):
-        self.rpmBarBG = self.canvas.create_rectangle(0, 0, 800, 140, fill='black')
-        self.rpmBar = self.canvas.create_rectangle(0, 0, 800, 120, fill='black')
+        self.rpmBarBG = self.canvas.create_rectangle(0, 0, 780, 140, fill='black')
+        self.rpmBar = self.canvas.create_rectangle(0, 0, 780, 120, fill='black')
         self.rpmVal = self.canvas.create_text(160, 40, fill='white', font=('arial', 60), text='0')
 
         # self.rpmBar.grid(column=0, row=0, columnspan=3, sticky=W)
@@ -157,12 +157,12 @@ class DashGUI:
     def draw_aesthetics(self, master):
         self.rpmimage = self.canvas.create_image(400, 70, image=self.rpmpng, tags="rpmGauge")
         # self.circle = self.canvas.create_oval(-200, 20, 1600, 160, fill='green', outline='green')
-        self.blocker1 = self.canvas.create_rectangle(0, 160, 800, 360, fill='black', outline='black')
+        self.blocker1 = self.canvas.create_rectangle(0, 160, 780, 360, fill='black', outline='black')
         self.canvas.tag_raise(self.rpmBar)
         self.canvas.tag_raise(self.rpmVal)
 
     def updateRPM(self, value):
-        self.canvas.coords(self.rpmBar, round((value * 780 / 12500)), 0, 800, 120)
+        self.canvas.coords(self.rpmBar, round((value * 780 / 12500)), 0, 780, 120)
         # self.rpmVal.text = str(round(value))
         self.canvas.itemconfigure(self.rpmVal, text=str(round(int((value + 50) / 100) * 100)))  # Rounding
         # TODO add blinking lights
