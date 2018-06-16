@@ -17,6 +17,8 @@ data = {'timestamp': 0, 'interval': 0, 'battery': 12.3, 'accelX': 0, 'accelY': 0
         'session': 0,
         'lambda': 0}
 while True:
-    data["rpm"] = data["rpm"] + 50
+    data["rpm"] = data["rpm"] + 150
+    if data["rpm"] >= 12500:
+        data["rpm"] = 0
     dp.publish(json.dumps(data).encode("UTF-8"))
-    sleep(0.1)
+    sleep(0.05)

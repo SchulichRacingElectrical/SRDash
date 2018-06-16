@@ -223,9 +223,9 @@ class Process:
             elif sample_meta.name.lower() == "accelx":
                 d = replace_value_with_definition(d, "accelX", sample.value)
             elif sample_meta.name.lower() == "accely":
-                d = replace_value_with_definition(d, "accely", sample.value)
+                d = replace_value_with_definition(d, "accelY", sample.value)
             elif sample_meta.name.lower() == "accelz":
-                d = replace_value_with_definition(d, "accelz", sample.value)
+                d = replace_value_with_definition(d, "accelZ", sample.value)
             elif sample_meta.name.lower() == "yaw":
                 d = replace_value_with_definition(d, "yaw", sample.value)
             elif sample_meta.name.lower() == "pitch":
