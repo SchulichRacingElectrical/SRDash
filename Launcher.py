@@ -2,18 +2,15 @@ import asyncio
 import json
 import threading
 import time
-import traceback
-from tkinter import Tk, TclError
-import http.client as httplib
+from tkinter import Tk
 
-from DashGUI import DashGUI, sys
+import Utilities
+from DashGUI import DashGUI
 from Process import Process
-
 # from Pusher import Pusher
 from SocketPusher import Pusher
 
 
-# noinspection PyBroadException
 class Launcher:
     root = None
     dash = None
@@ -22,13 +19,14 @@ class Launcher:
     PU_TIMEOUT = 10
     SRServer = None
     data = {}
+
     def __init__(self):
         # Connection Variables
         self.processor = None
         self.periodic_update = time.time()
         self.last_update = time.time()
         self.connected = False
-        self.internetConnected = self.have_internet()
+        self.internetConnected = Utilities.have_internet()
         self.publisher_loop = None
         self.publisher = None
         self.data = {'timestamp': 0, 'interval': 0, 'battery': 12.3, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0,
@@ -94,53 +92,33 @@ class Launcher:
         asyncio.set_event_loop(loop)
         loop.run_forever()
 
-    def update(self):
-        # DAQ is not connected. Continuing trying until connection established
-        # TODO: COMMENT BEFORE DEPLOYING ON CAR
-        # """ START DEBUGGING """
-        # if self.data["rpm"] >= 15000:
-        #     self.data["rpm"] = 0
-        # self.data["rpm"] = self.data["rpm"] + 40
-        # self.data["coolantTemperature"] = self.data["coolantTemperature"]
-        # self.data["afr"] = self.data["afr"]
-        # self.data["speed"] = self.data["speed"]
-        # self.data["battery"] = self.data["battery"]
-        # self.data["oilTemperature"] = self.data["oilTemperature"]
-        # self.data["fuelTemp"] = self.data["fuelTemp"]
-        # self.dash.update(self.data)
-        # self.root.update()
-        # try:
-        #     elapsed_time = time.time() - self.last_update
-        #     if elapsed_time > self.UPDATE_TIMEOUT:
-        #         self.last_update = time.time()
-        #         self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
-        # except Exception as e:
-        #         print("Not Connected to Internet")
-        # """" END DEBUGGING """
+    def update_not_connected(self):
+        elapsed_time = time.time() - self.start_time
+        if elapsed_time > self.TIMEOUT:
+            self.connectToDAQ()
+        self.dash.update(self.data, self.connected, self.internetConnected)
+        self.root.update()
 
+    def update_connected(self):
+        # Update data dictionary in class
+        self.worker_loop.call_soon(self.get_data())
+        if self.internetConnected:
+            self.publish_to_SRServer()
 
-        if not self.connected:
-            self.data["DAQConnected"] = 0
-            elapsed_time = time.time() - self.start_time
-            if elapsed_time > self.TIMEOUT:
-                self.connectToDAQ()
-            self.dash.update(self.data, self.connected, self.internetConnected)
-            self.root.update()
-        else:
-            self.data["DAQConnected"] = 1
-            self.worker_loop.call_soon(self.get_data())
-            if self.internetConnected:
-                elapsed_time = time.time() - self.last_update
-                if elapsed_time > self.UPDATE_TIMEOUT:
-                    self.last_update = time.time()
-                    self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
-            print(self.data)
-            self.dash.update(self.data, self.connected, self.internetConnected)
-            self.root.update()
+        self.dash.update(self.data, self.connected, self.internetConnected)
+        self.root.update()
+
+    def publish_to_SRServer(self):
+        elapsed_time = time.time() - self.last_update
+        if elapsed_time > self.UPDATE_TIMEOUT:
+            self.last_update = time.time()
+            self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
+
+    def check_device_status(self):
         elapsed_time = time.time() - self.periodic_update
         if elapsed_time > self.PU_TIMEOUT:
             self.periodic_update = time.time()
-            self.internetConnected = self.have_internet()
+            self.internetConnected = Utilities.have_internet()
             if self.processor is None:
                 self.connectToDAQ()
             else:
@@ -149,20 +127,16 @@ class Launcher:
                 except Exception as e:
                     self.connected = False
 
+    def update(self):
+        # DAQ is not connected. Continuing trying until connection established
+        if not self.connected:
+            self.update_not_connected()
+        else:
+            self.update_connected()
+        self.check_device_status()
 
     def get_data(self):
-        self.data = json.loads(self.processor.getData().decode('utf-8'))
-
-    def have_internet(self):
-        conn = httplib.HTTPConnection("www.google.com", timeout=1)
-        try:
-            conn.request("HEAD", "/")
-            conn.close()
-            return True
-        except Exception as e:
-            print("Internet not connected")
-            conn.close()
-            return False
+        self.data = json.loads(self.processor.get_data().decode('utf-8'))
 
 
 if __name__ == '__main__':

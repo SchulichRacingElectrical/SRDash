@@ -2,7 +2,7 @@ import sys
 
 import time
 from CloudPusher import Pusher
-from Utilities import readifyData, stringMe
+from Utilities import readify_data, string_me
 from Process import Process
 from SocketPusher import DashPusher
 from subprocess import call
