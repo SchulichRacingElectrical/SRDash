@@ -34,7 +34,7 @@ if __name__ == '__main__':
         dPusher = DashPusher(5002)
         processor = Process()
         while True:
-            dash_data = processor.getData()
+            dash_data = processor.get_data()
             print(dash_data)
             dPusher.publish(dash_data)
     except (KeyboardInterrupt, SystemExit):

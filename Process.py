@@ -3,7 +3,7 @@ import re
 import serial
 import platform
 from serial.tools import list_ports
-from Utilities import replace_value_with_definition, readifyData, stringMe
+from Utilities import replace_value_with_definition, readify_data, string_me
 import datetime
 
 CHANNEL_TYPE_UNKNOWN = 0
@@ -103,7 +103,7 @@ class Process:
                                  timeout=self.timeout,
                                  write_timeout=self.writeTimeout)
         self.updateMeta()
-        self.setRate(50)
+        self.set_rate(50)
 
     def get_available_devices(self):
         devices = [x[0] for x in list_ports.comports()]
@@ -112,7 +112,6 @@ class Process:
 
     def get_device(self):
         devices = self.get_available_devices()
-        print(devices)
         r = None
         if platform.system() == "Darwin":
             r = re.compile(".*usb")
@@ -126,18 +125,18 @@ class Process:
         return next(filtered_devices)
 
     def connect(self):
-        deviceToConnect = self.get_device()
-        print("Connected to '" + deviceToConnect + "'.")
-        return deviceToConnect
+        device_to_connect = self.get_device()
+        print("Connected to '" + device_to_connect + "'.")
+        return device_to_connect
 
     def updateMeta(self):
         statement = '{"getMeta":null}\r\n'
         self.ser.write(statement.encode("utf-8"))
         while True:
-            meta = self.getLine()
+            meta = self.get_line()
             if meta is not None and b'{"meta"' in meta:
                 try:
-                    raw_data = stringMe(meta)
+                    raw_data = string_me(meta)
                     self.metas = ChannelMetaCollection()
                     self.metas.fromJson(raw_data["meta"])
                 except Exception as e:
@@ -146,78 +145,69 @@ class Process:
                     print("Updated Channel Metadata")
                     break
 
-    def processData(self, dataJson):
+    def processData(self, data_json):
         metas = self.metas.channel_metas
         # print(metas)
-        channelConfigCount = len(metas)
-        bitmaskFieldCount = max(0, int((channelConfigCount - 1) / 32)) + 1
+        channel_config_count = len(metas)
+        bitmask_field_count = max(0, int((channel_config_count - 1) / 32)) + 1
 
-        maxFieldCount = channelConfigCount + bitmaskFieldCount
+        max_field_count = channel_config_count + bitmask_field_count
 
-        fieldData = dataJson
-        fieldDataSize = len(fieldData)
-        if fieldDataSize > maxFieldCount or fieldDataSize < bitmaskFieldCount:
+        field_data = data_json
+        field_data_size = len(field_data)
+        if field_data_size > max_field_count or field_data_size < bitmask_field_count:
             raise Exception(
-                'Unexpected data packet count {}; channel meta expects between {} and {} channels'.format(fieldDataSize,
-                                                                                                          bitmaskFieldCount,
-                                                                                                          maxFieldCount))
+                'Unexpected data packet count {}; channel meta expects between {} and {} channels'.format(field_data_size,
+                                                                                                          bitmask_field_count,
+                                                                                                          max_field_count))
 
-        bitmaskFields = []
-        for i in range(fieldDataSize - bitmaskFieldCount, fieldDataSize):
-            bitmaskFields.append(int(fieldData[i]))
+        bitmask_fields = []
+        for i in range(field_data_size - bitmask_field_count, field_data_size):
+            bitmask_fields.append(int(field_data[i]))
 
         samples = self.samples
         del samples[:]
 
-        channelConfigIndex = 0
-        bitmapIndex = 0
-        fieldIndex = 0
+        channel_config_index = 0
+        bitmap_index = 0
+        field_index = 0
         mask_index = 0
-        channelConfigCount = len(metas)
-        while channelConfigIndex < channelConfigCount:
+        channel_config_count = len(metas)
+        while channel_config_index < channel_config_count:
             if mask_index >= 32:
-                mask_index = 0;
-                bitmapIndex += 1
-                if bitmapIndex > len(bitmaskFields):
+                mask_index = 0
+                bitmap_index += 1
+                if bitmap_index > len(bitmask_fields):
                     print("channel count overflowed number of bitmap fields available")
 
             mask = 1 << mask_index
-            if (bitmaskFields[bitmapIndex] & mask) != 0:
-                value = float(fieldData[fieldIndex])
-                fieldIndex += 1
-                sample = SampleValue(value, metas[channelConfigIndex])
+            if (bitmask_fields[bitmap_index] & mask) != 0:
+                value = float(field_data[field_index])
+                field_index += 1
+                sample = SampleValue(value, metas[channel_config_index])
                 samples.append(sample)
-            channelConfigIndex += 1
+            channel_config_index += 1
             mask_index += 1
 
-    def setRate(self, rate):
+    def set_rate(self, rate):
         statement = '{"setTelemetry":{"rate":' + str(rate) + '}}\r\n'
         self.ser.write(statement.encode("utf-8"))
 
-    def getLine(self):
+    def get_line(self):
         try:
             row = self.ser.readline()
         except serial.SerialException:
             row = None
         return row
 
-    def readifySamples(self):
+    def readify_samples(self):
         d = self.I_D
         samples = self.samples
-        print(len(samples))
         for sample in samples:
             sample_meta = sample.channelMeta
-            # {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0, 'pitch': 0,
-            #  'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0, 'iat': 0,
-            #  'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0, 'rearRight': 0,
-            #  'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0, 'session': 0}
 
             if sample_meta.name.lower() == "rpm":
                 d = replace_value_with_definition(d, "rpm", sample.value)
-                # d = replace_value_with_definition(d, "rpm", self.test_rpm)
-                # self.test_rpm = self.test_rpm + 200
-                # if self.test_rpm > 13000:
-                #     self.test_rpm = 0
             elif sample_meta.name.lower() == "gear":
                 d = replace_value_with_definition(d, "gear", sample.value)
             elif sample_meta.name.lower() == "enginetemp":
@@ -266,23 +256,20 @@ class Process:
                 d = replace_value_with_definition(d, "oilTemperature", sample.value)
             elif sample_meta.name.lower() == "battery":
                 d = replace_value_with_definition(d, "battery", sample.value)
-            elif sample_meta.name.lower() == "fueltemp":
-                d = replace_value_with_definition(d, "fuelTemp", sample.value)
-
+        # Add timestamp
         d = replace_value_with_definition(d, "timestamp", datetime.datetime.now().timestamp())
-        data = readifyData(d)
-        # print(data)
+        # Convert into JSON Object and convert into bytes
+        data = readify_data(d)
         return data
 
-    def getData(self):
-        row = self.getLine()
-        # print(row)
+    def get_data(self):
+        row = self.get_line()
         if row is not None and b"{\"s\":{" in row:
             try:
-                raw_data = stringMe(row)['s']['d']
+                raw_data = string_me(row)['s']['d']
                 self.processData(raw_data)
             except Exception as e:
                 print(e)
 
-        display_data = self.readifySamples()
+        display_data = self.readify_samples()
         return display_data

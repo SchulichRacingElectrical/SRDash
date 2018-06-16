@@ -16,7 +16,7 @@ import threading
 from SocketPusher import DashPusher
 from Process import Process
 from CloudPusher import Pusher
-from Utilities import readifyData
+from Utilities import readify_data
 import time
 import logging
 import operator
@@ -166,13 +166,13 @@ class Display(Widget):
         # print(self.serverSocket)
         # data, server = self.serverSocket.recvfrom(self.buffer_size)
         # self.serverSocket.recv(self.buffer_size*2)
-        self.data = json.loads(self.processor.getData().decode('utf-8'))
+        self.data = json.loads(self.processor.get_data().decode('utf-8'))
         # self.data =
         # print(datetime.datetime.now() - start)
 
     def publish(self, publisher, data):
-        publisher.publish(readifyData(data))
-        self.dPusher.publish(readifyData(data))
+        publisher.publish(readify_data(data))
+        self.dPusher.publish(readify_data(data))
         # self.s.post(PUB_ENDPOINT, params={'id': ANALYTICS_CHANNEL}, json=data)
 
     def update(self, *args):
