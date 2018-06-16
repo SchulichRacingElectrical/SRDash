@@ -1,5 +1,6 @@
 import json
 import http.client as httplib
+import time
 
 
 def create_json(data):
@@ -23,12 +24,15 @@ def replace_value_with_definition(current_dict, key_to_find, definition):
 
 
 def have_internet():
+    start_time = time.time()
     conn = httplib.HTTPConnection("www.google.com", timeout=1)
     try:
         conn.request("HEAD", "/")
         conn.close()
+        print(time.time()-start_time)
         return True
     except Exception as e:
         print("Internet not connected")
+        print(time.time() - start_time)
         conn.close()
         return False

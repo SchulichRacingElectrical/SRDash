@@ -1,3 +1,4 @@
+import random
 import re
 
 import serial
@@ -112,6 +113,7 @@ class Process:
 
     def get_device(self):
         devices = self.get_available_devices()
+        print(devices)
         r = None
         if platform.system() == "Darwin":
             r = re.compile(".*usb")
@@ -207,6 +209,10 @@ class Process:
             sample_meta = sample.channelMeta
 
             if sample_meta.name.lower() == "rpm":
+                # self.test_rpm = self.test_rpm + 100
+                # if self.test_rpm >= 12500:
+                #     self.test_rpm = 0
+                #self.test_rpm = random.randint(1, 12500)
                 d = replace_value_with_definition(d, "rpm", sample.value)
             elif sample_meta.name.lower() == "gear":
                 d = replace_value_with_definition(d, "gear", sample.value)

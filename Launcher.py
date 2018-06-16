@@ -102,6 +102,7 @@ class Launcher:
     def update_connected(self):
         # Update data dictionary in class
         self.worker_loop.call_soon(self.get_data())
+        #print(self.data["rpm"])
         if self.internetConnected:
             self.publish_to_SRServer()
 
@@ -109,10 +110,13 @@ class Launcher:
         self.root.update()
 
     def publish_to_SRServer(self):
-        elapsed_time = time.time() - self.last_update
-        if elapsed_time > self.UPDATE_TIMEOUT:
-            self.last_update = time.time()
-            self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
+        try:
+            elapsed_time = time.time() - self.last_update
+            if elapsed_time > self.UPDATE_TIMEOUT:
+                self.last_update = time.time()
+                self.SRServer.publish(json.dumps(self.data).encode("UTF-8"))
+        except Exception as e:
+            print(e)
 
     def check_device_status(self):
         elapsed_time = time.time() - self.periodic_update
