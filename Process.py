@@ -87,14 +87,14 @@ class Process:
                     'iat': 0,
                     'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0,
                     'rearRight': 0,
-                    'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelRate': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0,
+                    'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelRate': 0, 'fuelUsage': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0,
                     'session': 0, 'lambda': 0}
 
     I_D = {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0, 'pitch': 0,
            'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0, 'iat': 0,
            'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0, 'rearRight': 0,
-           'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'fuelRate': 0, 'baro': 0, 'altitude': 0,
-           'session': 0, 'lambda': 0}
+           'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'fuelRate': 0, 'fuelUsage': 0, 'baro': 0,
+           'altitude': 0, 'session': 0, 'lambda': 0}
     data = {}
 
     def __init__(self):
@@ -266,6 +266,8 @@ class Process:
                 d = replace_value_with_definition(d, "fuelTemp", sample.value)
             elif sample_meta.name.lower() == "fuelrate":
                 d = replace_value_with_definition(d, "fuelRate", sample.value)
+            elif sample_meta.name.lower() == "fuelusage":
+                d = replace_value_with_definition(d, "fuelUsage", sample.value)
         # Add timestamp
         d = replace_value_with_definition(d, "timestamp", datetime.datetime.now().timestamp())
         # Convert into JSON Object and convert into bytes
