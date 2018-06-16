@@ -35,7 +35,7 @@ class Launcher:
                      'iat': 0,
                      'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0,
                      'rearRight': 0,
-                     'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0,
+                     'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'fuelRate': 0, 'baro': 0, 'altitude': 0,
                      'session': 0, 'lambda': 0}
         self.start_time = 0
         self.connectToDAQ()
