@@ -162,7 +162,7 @@ class DashGUI:
         self.canvas.tag_raise(self.rpmVal)
 
     def updateRPM(self, value):
-        self.canvas.coords(self.rpmBar, round((value * 800 / 12500)), 0, 800, 120)
+        self.canvas.coords(self.rpmBar, round((value * 780 / 12500)), 0, 800, 120)
         # self.rpmVal.text = str(round(value))
         self.canvas.itemconfigure(self.rpmVal, text=str(round(int((value + 50) / 100) * 100)))  # Rounding
         # TODO add blinking lights
