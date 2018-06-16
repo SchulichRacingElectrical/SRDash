@@ -13,8 +13,8 @@ class DashGUI:
         master.resizable(width=False, height=False)
         master.overrideredirect(True)
         #master.config(cursor="none")
-        #self.rpmpng = PhotoImage(file="/home/pi/Production/RPM_Gauge.png")
-        self.rpmpng = PhotoImage(file="RPM_Gauge.png")
+        self.rpmpng = PhotoImage(file="/home/pi/Production/RPM_Gauge.png")
+        #self.rpmpng = PhotoImage(file="RPM_Gauge.png")
 
         #self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
         self.rpmmax = 12400

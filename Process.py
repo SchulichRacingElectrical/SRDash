@@ -268,6 +268,8 @@ class Process:
                 d = replace_value_with_definition(d, "fuelRate", sample.value)
             elif sample_meta.name.lower() == "fuelusage":
                 d = replace_value_with_definition(d, "fuelUsage", sample.value)
+            elif sample_meta.name.lower() == "tps":
+                d = replace_value_with_definition(d, "tps", sample.value)
         # Add timestamp
         d = replace_value_with_definition(d, "timestamp", datetime.datetime.now().timestamp())
         # Convert into JSON Object and convert into bytes
