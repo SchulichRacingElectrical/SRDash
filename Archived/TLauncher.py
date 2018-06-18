@@ -85,15 +85,15 @@ class TestLauncher:
         elapsed_time = time.time() - self.start_time
         if elapsed_time > self.TIMEOUT:
             self.connectToDAQ()
-        print(self.data)
+        #print(self.data)
 
     def update_connected(self):
         # Update data dictionary in class
         self.worker_loop.call_soon(self.get_data())
         #print(self.data["rpm"])
         if self.internetConnected:
+            print(self.data)
             self.publish_to_SRServer()
-        print(self.data)
 
     def publish_to_SRServer(self):
         try:
@@ -127,7 +127,6 @@ class TestLauncher:
 
     def get_data(self):
         self.data = json.loads(self.processor.get_data().decode('utf-8'))
-        print(self.data)
 
 
 if __name__ == '__main__':
