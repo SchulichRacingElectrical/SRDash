@@ -2,16 +2,13 @@ import asyncio
 import json
 import threading
 import time
-from tkinter import Tk
 
 import Utilities
-from DashGUI import DashGUI
 from Process import Process
-# from Pusher import Pusher
 from SocketPusher import Pusher
 
 
-class Launcher:
+class TestLauncher:
     root = None
     dash = None
     TIMEOUT = 5
@@ -40,7 +37,6 @@ class Launcher:
         self.start_time = 0
         self.connectToDAQ()
         self.connectToSRServer()
-        self.launchGUI()
 
         # Setting up Threading
         self.worker_loop = asyncio.new_event_loop()
@@ -50,13 +46,6 @@ class Launcher:
         # TODO: ADD CLOUD CAPABILITY
         # self.connectToCloud()
 
-    def launchGUI(self):
-        self.root = Tk()
-        self.dash = DashGUI(self.root)
-        self.dash.init_all_frames(self.root)
-        self.dash.init_all_dials(self.root)
-        self.dash.init_rpmbar(self.root)
-        self.dash.draw_aesthetics(self.root)
 
     # TODO: ADD CLOUD CAPABILITY
     # def connectToCloud(self):
@@ -96,8 +85,7 @@ class Launcher:
         elapsed_time = time.time() - self.start_time
         if elapsed_time > self.TIMEOUT:
             self.connectToDAQ()
-        self.dash.update(self.data, self.connected, self.internetConnected)
-        self.root.update()
+        print(self.data)
 
     def update_connected(self):
         # Update data dictionary in class
@@ -105,9 +93,7 @@ class Launcher:
         #print(self.data["rpm"])
         if self.internetConnected:
             self.publish_to_SRServer()
-
-        self.dash.update(self.data, self.connected, self.internetConnected)
-        self.root.update()
+        print(self.data)
 
     def publish_to_SRServer(self):
         try:
@@ -145,6 +131,6 @@ class Launcher:
 
 
 if __name__ == '__main__':
-    launcher = Launcher()
+    launcher = TestLauncher()
     while True:
         launcher.update()

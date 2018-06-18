@@ -1,5 +1,6 @@
 import random
 import re
+import time
 
 import serial
 import platform
@@ -92,17 +93,19 @@ class Process:
 
     I_D = {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0, 'pitch': 0,
            'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0, 'iat': 0,
-           'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0, 'rearRight': 0,
+           'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frfontRight': 0, 'rearLeft': 0, 'rearRight': 0,
            'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'fuelRate': 0, 'fuelUsage': 0, 'baro': 0,
            'altitude': 0, 'session': 0, 'lambda': 0}
     data = {}
-
+    last_called = None
+    cumulative_fuel_usage = 0
     def __init__(self):
         self.data = self.INITIAL_DATA
         self.device = self.connect()
         self.ser = serial.Serial(self.device,
                                  timeout=self.timeout,
                                  write_timeout=self.writeTimeout)
+        self.last_called = time.time()
         self.updateMeta()
         self.set_rate(50)
 
@@ -214,6 +217,7 @@ class Process:
                 #     self.test_rpm = 0
                 #self.test_rpm = random.randint(1, 12500)
                 d = replace_value_with_definition(d, "rpm", sample.value)
+                #d = replace_value_with_definition(d, "rpm", 1337)
             elif sample_meta.name.lower() == "gear":
                 d = replace_value_with_definition(d, "gear", sample.value)
             elif sample_meta.name.lower() == "enginetemp":
@@ -266,14 +270,14 @@ class Process:
                 d = replace_value_with_definition(d, "fuelTemp", sample.value)
             elif sample_meta.name.lower() == "fuelrate":
                 d = replace_value_with_definition(d, "fuelRate", sample.value)
-            elif sample_meta.name.lower() == "fuelusage":
-                d = replace_value_with_definition(d, "fuelUsage", sample.value)
+
             elif sample_meta.name.lower() == "tps":
                 d = replace_value_with_definition(d, "tps", sample.value)
         # Add timestamp
         d = replace_value_with_definition(d, "timestamp", datetime.datetime.now().timestamp())
         # Convert into JSON Object and convert into bytes
-        data = readify_data(d)
+        data = self.calculate_fuel_usage(d)
+        data = readify_data(data)
         return data
 
     def get_data(self):
@@ -287,3 +291,14 @@ class Process:
 
         display_data = self.readify_samples()
         return display_data
+
+    def calculate_fuel_usage(self, data):
+        time_elapsed = time.time() - self.last_called
+        self.last_called = time.time()
+        correction = 1
+        x = ((correction * (data["injectorPW"] - 0.5) * data["rpm"]) / 120)
+        self.cumulative_fuel_usage = (self.cumulative_fuel_usage + x * (time_elapsed / 60 / 1000))
+        data = replace_value_with_definition(data, "fuelRate", x)
+
+        data = replace_value_with_definition(data, "fuelUsage", self.cumulative_fuel_usage)
+        return data
