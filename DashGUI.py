@@ -12,11 +12,11 @@ class DashGUI:
         master.geometry('{}x{}'.format(master.winfo_screenwidth() - pad, master.winfo_screenheight() - pad))
         master.resizable(width=False, height=False)
         master.overrideredirect(True)
-        #master.config(cursor="none")
+        # master.config(cursor="none")
         self.rpmpng = PhotoImage(file="/home/pi/Production/RPM_Gauge.png")
-        #self.rpmpng = PhotoImage(file="RPM_Gauge.png")
+        # self.rpmpng = PhotoImage(file="RPM_Gauge.png")
 
-        #self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
+        # self.rpmpng_max = PhotoImage(file="RPM_Gauge_red.png")
         self.rpmmax = 12400
         # CONFIGURATION
         self.upperLeftDict = "coolantTemperature"
@@ -139,12 +139,18 @@ class DashGUI:
         self.lowerRightValue.grid(column=0, row=3, sticky=E)
         self.lowerRightValue.config(font=(font, bigFontSize))
 
-        #Statusbar
-        self.daqstatusindicator = Button(self.bottomFrame, text='DAQ: ' ,width = 8, padx=padx, pady=0, fg = 'white', background = 'red')
-        self.daqstatusindicator.grid(column=0, row=0, sticky=N+W)
+        # Statusbar
+        self.daqstatusindicator = Button(self.bottomFrame, text='DAQ', width=8, padx=padx, pady=0, fg='white',
+                                         background='red')
+        self.daqstatusindicator.grid(column=0, row=0, sticky=N + W)
 
-        self.netstatusindicator = Button(self.bottomFrame, text='NET: ' ,width=8, padx=padx, pady=0, fg = 'white', background='red')
-        self.netstatusindicator.grid(column=2, row=0, sticky=N+E)
+        self.gpstatusindicator = Button(self.bottomFrame, text='GPS', width=8, padx=padx, pady=0, fg='white',
+                                        background='red')
+        self.gpstatusindicator.grid(column=1, row=0, sticky=N)
+
+        self.netstatusindicator = Button(self.bottomFrame, text='NET', width=8, padx=padx, pady=0, fg='white',
+                                         background='red')
+        self.netstatusindicator.grid(column=2, row=0, sticky=N + E)
 
     def init_rpmbar(self, master):
         self.rpmBarBG = self.canvas.create_rectangle(0, 0, 780, 140, fill='black')
@@ -168,7 +174,7 @@ class DashGUI:
         # TODO add blinking lights
 
     def setDaqStatus(self, status):
-        if status == True:
+        if status:
             self.daqstatusindicator['bg'] = 'lawn green'
             self.daqstatusindicator['fg'] = 'black'
         else:
@@ -176,12 +182,20 @@ class DashGUI:
             self.daqstatusindicator['fg'] = 'white'
 
     def setNetStatus(self, status):
-        if status == True:
+        if status:
             self.netstatusindicator['bg'] = 'lawn green'
             self.netstatusindicator['fg'] = 'black'
         else:
             self.netstatusindicator['bg'] = 'red'
             self.netstatusindicator['fg'] = 'white'
+
+    def setGPSStatus(self, status):
+        if status:
+            self.gpstatusindicator['bg'] = 'lawn green'
+            self.gpstatusindicator['fg'] = 'black'
+        else:
+            self.gpstatusindicator['bg'] = 'red'
+            self.gpstatusindicator['fg'] = 'white'
 
     def updateUpLeft(self, value):
         self.upperLeftValue['text'] = round(value)
@@ -204,7 +218,7 @@ class DashGUI:
     def greet(self):
         print("Greetings!")
 
-    def update(self, data, DAQConnected, internetConnected):
+    def update(self, data, DAQConnected, internetConnected, gpsConnected):
         self.updateRPM(data["rpm"])
         self.updateUpLeft(data[self.upperLeftDict])
         self.updateLowLeft(data[self.lowerLeftDict])
@@ -214,3 +228,5 @@ class DashGUI:
         self.updateLowRight(data[self.lowerRightDict])
         self.setDaqStatus(DAQConnected)
         self.setNetStatus(internetConnected)
+        self.setGPSStatus(gpsConnected)
+

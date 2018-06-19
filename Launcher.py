@@ -19,7 +19,7 @@ class Launcher:
     PU_TIMEOUT = 10
     SRServer = None
     data = {}
-
+    gpsConnected = False
     def __init__(self):
         # Connection Variables
         self.processor = None
@@ -99,7 +99,8 @@ class Launcher:
         elapsed_time = time.time() - self.start_time
         if elapsed_time > self.TIMEOUT:
             self.connectToDAQ()
-        self.dash.update(self.data, self.connected, self.internetConnected)
+        self.gpsConnected = False
+        self.dash.update(self.data, self.connected, self.internetConnected, self.gpsConnected)
         self.root.update()
 
     def update_connected(self):
@@ -108,9 +109,11 @@ class Launcher:
 
         if self.internetConnected:
             self.publish_to_SRServer()
+        if int(self.data["latitude"]) == 0 & int(self.data["longitude"]) == 0:
+            self.gpsConnected = False
         else:
-            print("Internet not connected - I don't understand what the fuck is going on")
-        self.dash.update(self.data, self.connected, self.internetConnected)
+            self.gpsConnected = True
+        self.dash.update(self.data, self.connected, self.internetConnected, self.gpsConnected)
         self.root.update()
 
     def publish_to_SRServer(self):
