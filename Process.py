@@ -270,7 +270,8 @@ class Process:
                 d = replace_value_with_definition(d, "fuelTemp", sample.value)
             elif sample_meta.name.lower() == "fuelrate":
                 d = replace_value_with_definition(d, "fuelRate", sample.value)
-
+            elif sample_meta.name.lower() == "speed":
+                d = replace_value_with_definition(d, "speed", round(sample.value*1.6,1))
             elif sample_meta.name.lower() == "tps":
                 d = replace_value_with_definition(d, "tps", sample.value)
         # Add timestamp
@@ -300,5 +301,5 @@ class Process:
         self.cumulative_fuel_usage = (self.cumulative_fuel_usage + x * (time_elapsed / 60 / 1000))
         data = replace_value_with_definition(data, "fuelRate", x)
 
-        data = replace_value_with_definition(data, "fuelUsage", self.cumulative_fuel_usage)
+        data = replace_value_with_definition(data, "fuelUsage", round(self.cumulative_fuel_usage,3))
         return data
