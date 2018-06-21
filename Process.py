@@ -91,14 +91,11 @@ class Process:
                     'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelRate': 0, 'fuelUsage': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0,
                     'session': 0, 'lambda': 0}
 
-    I_D = {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0, 'pitch': 0,
-           'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0, 'iat': 0,
-           'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0, 'rearRight': 0,
-           'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'fuelRate': 0, 'fuelUsage': 0, 'baro': 0,
-           'altitude': 0, 'session': 0, 'lambda': 0}
+    I_D = INITIAL_DATA
     data = {}
     last_called = None
     cumulative_fuel_usage = 0
+
     def __init__(self):
         self.data = self.INITIAL_DATA
         self.device = self.connect()
@@ -212,12 +209,7 @@ class Process:
             sample_meta = sample.channelMeta
 
             if sample_meta.name.lower() == "rpm":
-                # self.test_rpm = self.test_rpm + 100
-                # if self.test_rpm >= 12500:
-                #     self.test_rpm = 0
-                #self.test_rpm = random.randint(1, 12500)
                 d = replace_value_with_definition(d, "rpm", sample.value)
-                #d = replace_value_with_definition(d, "rpm", 1337)
             elif sample_meta.name.lower() == "gear":
                 d = replace_value_with_definition(d, "gear", sample.value)
             elif sample_meta.name.lower() == "enginetemp":
@@ -268,10 +260,8 @@ class Process:
                 d = replace_value_with_definition(d, "battery", sample.value)
             elif sample_meta.name.lower() == "fueltemp":
                 d = replace_value_with_definition(d, "fuelTemp", sample.value)
-            elif sample_meta.name.lower() == "fuelrate":
-                d = replace_value_with_definition(d, "fuelRate", sample.value)
             elif sample_meta.name.lower() == "speed":
-                d = replace_value_with_definition(d, "speed", round(sample.value*1.6,1))
+                d = replace_value_with_definition(d, "speed", round(sample.value*1.6, 1))
             elif sample_meta.name.lower() == "tps":
                 d = replace_value_with_definition(d, "tps", sample.value)
         # Add timestamp
@@ -299,7 +289,7 @@ class Process:
         correction = 1
         x = ((correction * (data["injectorPW"] - 0.5) * data["rpm"]) / 120)
         self.cumulative_fuel_usage = (self.cumulative_fuel_usage + x * (time_elapsed / 60 / 1000))
-        data = replace_value_with_definition(data, "fuelRate", x)
+        data = replace_value_with_definition(data, "fuelRate", round(x, 2))
 
-        data = replace_value_with_definition(data, "fuelUsage", round(self.cumulative_fuel_usage,3))
+        data = replace_value_with_definition(data, "fuelUsage", round(self.cumulative_fuel_usage, 3))
         return data
