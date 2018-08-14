@@ -13,17 +13,10 @@ from kivy.core.window import Window
 from kivy.config import Config
 import threading
 
-from SocketPusher import DashPusher
+from DashPusher import DashPusher
 from Process import Process
-from CloudPusher import Pusher
 from Utilities import readify_data
-import time
-import logging
-import operator
-import collections
-import os
 
-import psutil
 import requests
 
 Config.set('graphics', 'fullscreen', 'auto')
@@ -36,8 +29,8 @@ init_oilPress = -45
 current_gear = 999
 init_oilTemp = -45
 Builder.load_file("Dashboard.kv")
-#PUB_ENDPOINT = 'http://10.142.0.3:8080/pub'
-#ANALYTICS_CHANNEL = 'schulich_analytics'
+PUB_ENDPOINT = 'http://10.142.0.3:8080/pub'
+ANALYTICS_CHANNEL = 'schulich_analytics'
 
 """
 ################TO DO LIST################
@@ -88,34 +81,18 @@ class Display(Widget):
     '''
 
     img_size = BoundedNumericProperty(0.9, max=1.0, min=0.1)
-    # serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    host = "35.193.18.90"
-    port = 5002
-
-    buffer_size = 4096
-
-    # serverSocket.bind((host, port))
-    # serverSocket.listen(1)
     data = {'timestamp': 0, 'interval': 0, 'battery': 0, 'accelX': 0, 'accelY': 0, 'accelZ': 0, 'yaw': 0, 'pitch': 0,
             'roll': 0, 'rpm': 0, 'map': 0, 'tps': 0, 'oilPressure': 0, 'afr': 0, 'coolantTemperature': 0, 'iat': 0,
             'oilTemperature': 0, 'gear': 0, 'speed': 0, 'frontLeft': 0, 'frontRight': 0, 'rearLeft': 0, 'rearRight': 0,
             'latitude': 0, 'longitude': 0, 'injectorPW': 0, 'fuelTemp': 0, 'baro': 0, 'altitude': 0, 'session': 0,
             'lambda': 0}
-    worker_loop = asyncio.new_event_loop()
-
-    # dPusher = DashPusher(5002)
     processor = None
     last_updated_time = datetime.datetime.now()
     sticky_rpm = 999
     rpm_counter = 0
     sum = 0
     connected = False
-    publisher_loop = None
-    publisher = None
-    logOnCloud = True
-    #s = requests.Session()
-    dPusher = DashPusher(5001)
 
     def __init__(self, **kwargs):
         # needed for constructor
@@ -126,17 +103,6 @@ class Display(Widget):
         # timer just like in java, takes in a function and acts as a independent thread
         Clock.schedule_interval(self.update, 0.01)
 
-        worker = Thread(target=self.start_worker, args=(self.worker_loop,))
-        worker.start()
-        if self.logOnCloud:
-            try:
-                self.publisher_loop = asyncio.new_event_loop()
-                publisher_wrk = threading.Thread(target=self.start_worker_publisher, args=(self.publisher_loop,))
-                publisher_wrk.start()
-                self.publisher = Pusher("winged-line-203918", "cardata")
-            except Exception as e:
-                print("Unable to connect to Google Cloud")
-                print(e)
         try:
             self.processor = Process()
             self.connected = True
@@ -152,56 +118,27 @@ class Display(Widget):
         if keycode[1] == 'q':
             exit()
 
-    def start_worker(self, loop):
-        asyncio.set_event_loop(loop)
-        loop.run_forever()
-
-    def start_worker_publisher(self, loop):
-        """Switch to new event loop and run forever"""
-        asyncio.set_event_loop(loop)
-        loop.run_forever()
-
     def get_data(self):
-
-        # print(self.serverSocket)
-        # data, server = self.serverSocket.recvfrom(self.buffer_size)
-        # self.serverSocket.recv(self.buffer_size*2)
         self.data = json.loads(self.processor.get_data().decode('utf-8'))
-        # self.data =
-        # print(datetime.datetime.now() - start)
-
-    def publish(self, publisher, data):
-        publisher.publish(readify_data(data))
-        self.dPusher.publish(readify_data(data))
-        # self.s.post(PUB_ENDPOINT, params={'id': ANALYTICS_CHANNEL}, json=data)
 
     def update(self, *args):
-        self.connected = True
         if self.connected:
             self.DAQ_Missing = ""
-            # self.worker_loop.call_soon(self.get_data())
-            if self.logOnCloud:
-                self.publisher_loop.call_soon_threadsafe(self.publish, self.publisher, self.data)
-        # print(self.data)
+            self.get_data()
 
         '''
         UPDATING VALUES
         '''
         self.rpm = self.data["rpm"]
-        # self.rpm = self.data["frontleft"]
         self.oilPress = round(self.data["oilPressure"], 1)
-        # self.gear = self.data["gear"]
 
         self.oilTemp = int(self.data["oilTemperature"])
 
         if self.data["coolantTemperature"] > 0:
             self.coolantTemp = int(self.data["coolantTemperature"])
 
-        # if self.data["afr"] > 0:
-        multiplier = 14.7
         self.afr = round(self.data["afr"], 1)
-        # print(self.air_temp)
-        # print(self.data["rpm"])
+
         '''
         DEBUGGING
         '''

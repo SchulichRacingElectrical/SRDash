@@ -1,10 +1,9 @@
 import sys
 
 import time
-from CloudPusher import Pusher
 from Utilities import readify_data, string_me
 from Process import Process
-from SocketPusher import DashPusher
+from DashPusher import DashPusher
 from subprocess import call
 import threading
 import asyncio
@@ -14,7 +13,7 @@ import platform
 def runDash():
     command = ""
     if platform.system() == "Darwin":
-        command = "kivy /Users/hilmi/PycharmProjects1/SchulichRacing/Dash/Dash.py"
+        command = "python3 /Users/hilmi/PycharmProjects1/SchulichRacing-Kivy/Dash.py"
     elif platform.system() == "Linux":
         command = "python3 /home/pi/Production/Dash/Dash.py"
 
@@ -31,9 +30,6 @@ def start_worker_publisher(loop):
     asyncio.set_event_loop(loop)
     loop.run_forever()
 
-def publish(publisher, data):
-    publisher.publish(data)
-
 
 if __name__ == '__main__':
     try:
@@ -49,12 +45,10 @@ if __name__ == '__main__':
         dPusher = DashPusher(5002)
 
         processor = Process()
-        publisher = Pusher("winged-line-203918", "data")
         while True:
-            displayData, cloudData = processor.parseLines()
+            displayData = processor.getData()
             dPusher.publish(displayData)
-            if cloudData is not None:
-                publisher_loop.call_soon_threadsafe(publish, publisher, cloudData)
+
     except (KeyboardInterrupt, SystemExit):
         sys.exit()
 

@@ -104,7 +104,7 @@ class Process:
                                  write_timeout=self.writeTimeout)
         self.last_called = time.time()
         self.updateMeta()
-        self.set_rate(50)
+        self.set_rate(10)
 
     def get_available_devices(self):
         devices = [x[0] for x in list_ports.comports()]
@@ -264,6 +264,8 @@ class Process:
                 d = replace_value_with_definition(d, "speed", round(sample.value*1.6, 1))
             elif sample_meta.name.lower() == "tps":
                 d = replace_value_with_definition(d, "tps", sample.value)
+            elif sample_meta.name.lower() == "interval":
+                d = replace_value_with_definition(d, "interval", sample.value)
         # Add timestamp
         d = replace_value_with_definition(d, "timestamp", datetime.datetime.now().timestamp())
         # Convert into JSON Object and convert into bytes

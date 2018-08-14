@@ -1,7 +1,7 @@
 import sys
 from time import sleep
 from Process import Process
-from SocketPusher import DashPusher
+from DashPusher import DashPusher
 from subprocess import call
 import threading
 import asyncio
@@ -34,7 +34,7 @@ if __name__ == '__main__':
         dPusher = DashPusher(5002)
         processor = Process()
         while True:
-            dash_data = processor.get_data()
+            dash_data = processor.getData()
             print(dash_data)
             dPusher.publish(dash_data)
     except (KeyboardInterrupt, SystemExit):
